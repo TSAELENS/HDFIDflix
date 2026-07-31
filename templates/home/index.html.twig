@@ -1,0 +1,54 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}HDFIDflix
+{% endblock %}
+
+{% block body %}
+	<section class="py-5 text-center">
+		<h1 class="display-4 fw-bold mb-3">
+			Vous vous demandez quel film regarder ce soir ?
+			<br>
+		</h1>
+		<h2 class="h4 fw-bold mb-4">
+			Ne cherchez plus, HDFIDflix est là pour vous aider à trouver le film parfait !
+		</h2>
+
+		<p class="lead text-secondary mb-4">
+			Recherchez dès maintenant votre film, série, artiste... afin d'obtenir toutes les informations dont vous avez besoin :
+		</p>
+
+		{% for message in app.flashes('success') %}
+			<div class="alert alert-success">
+				{{ message }}
+			</div>
+		{% endfor %}
+
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-8 col-lg-6">
+                {{ form_start(form) }}
+
+                <div class="input-group input-group-lg">
+                    {{ form_widget(form.query, {
+                        attr: {
+                            class: 'form-control',
+                            placeholder: 'Rechercher...'
+                        }
+                    }) }}
+
+                    {{ form_widget(form.submit, {
+                        attr: {
+                            class: 'btn btn-danger'
+                        }
+                    }) }}
+                </div>
+
+                <div class="text-start mt-2">
+                    {{ form_errors(form.query) }}
+                </div>
+
+                {{ form_end(form) }}
+            </div>
+        </div>
+
+	</section>
+{% endblock %}
