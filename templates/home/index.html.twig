@@ -23,32 +23,66 @@
 			</div>
 		{% endfor %}
 
-        <div class="row justify-content-center">
-            <div class="col-12 col-md-8 col-lg-6">
-                {{ form_start(form) }}
+		<div class="row justify-content-center">
+			<div class="col-12 col-md-8 col-lg-6">
+				{{ form_start(form) }}
 
-                <div class="input-group input-group-lg">
-                    {{ form_widget(form.query, {
+				<div class="input-group input-group-lg">
+					{{ form_widget(form.query, {
                         attr: {
                             class: 'form-control',
                             placeholder: 'Rechercher...'
                         }
                     }) }}
 
-                    {{ form_widget(form.submit, {
+					{{ form_widget(form.submit, {
                         attr: {
                             class: 'btn btn-danger'
                         }
                     }) }}
-                </div>
+				</div>
 
-                <div class="text-start mt-2">
-                    {{ form_errors(form.query) }}
-                </div>
+				<div class="text-start mt-2">
+					{{ form_errors(form.query) }}
+				</div>
 
-                {{ form_end(form) }}
-            </div>
-        </div>
+				{{ form_end(form) }}
+			</div>
+		</div>
+
+		{% if query %}
+			<div class="mt-5">
+				<h2 class="h4 mb-4">
+					Résultats pour «
+					{{ query }}
+					»
+				</h2>
+
+				{% if results is empty %}
+					<p class="text-secondary">
+						Aucun résultat trouvé.
+					</p>
+				{% else %}
+					<div class="row g-4">
+						{% for result in results %}
+							<div class="col-12 col-md-6 col-lg-4">
+								<div class="card h-100">
+									<div class="card-body">
+										<span class="badge text-bg-secondary mb-2">
+											{{ result.media_type }}
+										</span>
+
+										<h3 class="h5">
+											{{ result.title ?? result.name ?? 'Sans titre' }}
+										</h3>
+									</div>
+								</div>
+							</div>
+						{% endfor %}
+					</div>
+				{% endif %}
+			</div>
+		{% endif %}
 
 	</section>
 {% endblock %}
