@@ -33,9 +33,6 @@ class GlobalSearchType extends AbstractType
                         maxMessage: 'La recherche ne peut pas dépasser {{ limit }} caractères.',
                     ),
                 ],
-            ])
-            ->add('submit', SubmitType::class, [
-                'label' => 'Rechercher',
             ]);
     }
 
@@ -46,4 +43,10 @@ class GlobalSearchType extends AbstractType
             'csrf_protection' => false,
         ]);
     }
+
+    public function getBlockPrefix(): string
+    {
+        return '';
+    }
+
 }
