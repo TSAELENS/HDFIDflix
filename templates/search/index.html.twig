@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Recherche - HDFIDflix
+{% block title %}HDFIDflix
 {% endblock %}
 
 {% block body %}
@@ -18,7 +18,8 @@
 					{{ form_widget(form.query, {
             attr: {
                 class: 'form-control',
-                placeholder: 'Rechercher un film, une série, une personne...'
+                placeholder: 'Rechercher un film, une série, une personne...',
+                value: query
             }
         }) }}
 
@@ -33,57 +34,115 @@
 	</section>
 
 	<section class="py-4">
-
 		{% if query %}
-			<h1 class="mb-4">
+			<h1 class="h3 mb-4">
 				Résultats pour :
 				<span class="text-danger">{{ query }}</span>
 			</h1>
-		{% endif %}
-
-		{% if results is empty %}
-			<p class="text-secondary">
-				Aucun résultat trouvé.
-			</p>
-		{% else %}
-
 
 			<div class="row g-4">
-				{% for result in results %}
+				<aside class="col-12 col-lg-3">
+					<div class="card border-secondary">
+						<div class="card-header bg-danger text-white fw-bold py-3">
+							Résultats de votre recherche
+						</div>
 
-					{% set title = result.title ?? result.name ?? 'Sans titre' %}
-					{% set image = result.poster_path ?? result.profile_path ?? null %}
+						<div class="list-group list-group-flush">
+							<a href="{{ path('app_search', { query: query, type: 'movie' }) }}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center {{ selectedType == 'movie' ? 'active' : '' }}">
+								Films
 
-					<div class="col-12 col-md-6 col-lg-3">
-						<div class="card h-100 bg-dark text-light border-secondary">
-
-							{% if image %}
-								<img src="https://image.tmdb.org/t/p/w500{{ image }}" class="card-img-top" alt="{{ title }}">
-							{% endif %}
-
-							<div class="card-body">
-								<span class="badge bg-secondary mb-2">
-									{% if result.media_type == 'movie' %}
-										Film
-									{% elseif result.media_type == 'tv' %}
-										Série
-									{% elseif result.media_type == 'person' %}
-										Personne
-									{% endif %}
+								<span class="badge rounded-pill text-bg-secondary">
+									{{ resultCounts.movie }}
 								</span>
+							</a>
 
-								<h2 class="h5">
-									{{ title }}
-								</h2>
+							<a href="{{ path('app_search', { query: query, type: 'tv' }) }}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center {{ selectedType == 'tv' ? 'active' : '' }}">
+								Séries
 
-							</div>
+								<span class="badge rounded-pill text-bg-secondary">
+									{{ resultCounts.tv }}
+								</span>
+							</a>
+
+							<a href="{{ path('app_search', { query: query, type: 'person' }) }}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center {{ selectedType == 'person' ? 'active' : '' }}">
+								Personnes
+
+								<span class="badge rounded-pill text-bg-secondary">
+										{{ resultCounts.person }}
+								</span>
+							</a>
+
+                            
+							</a>
+
+
+							<a href="{{ path('app_search', {query: query, type: 'other'	}) }}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center {{ selectedType == 'other' ? 'active' : '' }}">
+								Autres
+
+								<span class="badge rounded-pill text-bg-secondary">
+									{{ resultCounts.other }}
+								</span>
+							</a>
 						</div>
 					</div>
+				</aside>
 
-				{% endfor %}
+				<div class="col-12 col-lg-9">
+					{% if results is empty %}
+						<p class="text-secondary">
+							Aucun résultat trouvé dans cette catégorie.
+						</p>
+					{% else %}
+						<div class="row g-4">
+							{% for result in results %}
+								{% set title = result.title ?? result.name ?? 'Sans titre' %}
+								{% set image = result.poster_path ?? result.profile_path ?? null %}
+
+								<div class="col-12 col-md-6 col-xl-4">
+									<article class="card h-100 bg-dark text-light border-secondary">
+                                        {% if image %}
+                                        <div class="ratio" style="--bs-aspect-ratio: 150%;">
+                                            <img
+                                                src="https://image.tmdb.org/t/p/w500{{ image }}"
+                                                class="card-img-top"
+                                                alt="{{ title }}"
+                                            >
+                                        </div>
+                                        {% else %}
+                                        <div class="ratio bg-secondary-subtle text-secondary" style="--bs-aspect-ratio: 150%;">
+                                            <div class="d-flex align-items-center justify-content-center">
+                                                    <div class="text-center">
+                                                    <div class="fs-1 mb-2">🖼️</div>
+                                                    <div>Image non disponible</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {% endif %}
+
+										<div class="card-body">
+											<span class="badge bg-secondary mb-2">
+												{% if selectedType == 'movie' %}
+													Film
+												{% elseif selectedType == 'tv' %}
+													Série
+                                                {% elseif selectedType == 'person' %}
+													Personne
+                                                {% else %}
+                                                    Autre
+												{% endif %}
+											</span>
+
+											<h2 class="h5">
+												{{ title }}
+											</h2>
+										</div>
+									</article>
+								</div>
+							{% endfor %}
+						</div>
+					{% endif %}
+				</div>
 			</div>
-
 		{% endif %}
-
 	</section>
 {% endblock %}
