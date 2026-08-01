@@ -34,4 +34,39 @@ final class TmdbService
 
         return $response->toArray();
     }
+
+    public function getMovieDetails(int $id): array
+    {
+        $response = $this->httpClient->request(
+            'GET',
+            self::BASE_URL . '/movie/' . $id,
+            [
+                'auth_bearer' => $this->apiToken,
+                'query' => [
+                    'language' => 'fr-FR',
+                    'append_to_response' => 'videos,credits,watch/providers,similar',
+                ],
+            ],
+        );
+
+        return $response->toArray();
+    }
+
+    public function getTvDetails(int $id): array
+    {
+        $response = $this->httpClient->request(
+            'GET',
+            self::BASE_URL . '/tv/' . $id,
+            [
+                'auth_bearer' => $this->apiToken,
+                'query' => [
+                    'language' => 'fr-FR',
+                    'append_to_response' => 'videos,aggregate_credits,watch/providers,similar',
+                ],
+            ],
+        );
+
+        return $response->toArray();
+    }
+
 }

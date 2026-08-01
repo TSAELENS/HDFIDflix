@@ -28,6 +28,10 @@ final class SearchController extends AbstractController
             'other' => [],
         ];
 
+        if (!$query) {
+            return $this->redirectToRoute('app_home');
+        }
+        
         if ($query !== '') {
             $response = $tmdbService->search($query);
             $results = $response['results'] ?? [];

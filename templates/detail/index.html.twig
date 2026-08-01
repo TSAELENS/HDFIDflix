@@ -1,0 +1,424 @@
+{% extends 'base.html.twig' %}
+
+{% set title = media.title ?? media.name ?? 'Sans titre' %}
+{% set releaseDate = media.release_date ?? media.first_air_date ?? null %}
+
+{% block title %}
+    {{ title }} - HDFIDflix
+{% endblock %}
+
+{% block body %}
+    <section class="py-5">
+        <div class="row g-5">
+
+            <div class="col-12 col-md-4">
+                {% if media.poster_path %}
+                    <img
+                        src="https://image.tmdb.org/t/p/w500{{ media.poster_path }}"
+                        class="img-fluid rounded shadow"
+                        alt="{{ title }}"
+                    >
+                {% else %}
+                    <div
+                        class="ratio bg-secondary-subtle text-secondary rounded"
+                        style="--bs-aspect-ratio: 150%;"
+                    >
+                        <div class="d-flex align-items-center justify-content-center">
+                            <div class="text-center">
+                                <div class="fs-1 mb-2">🖼️</div>
+                                <div>Image non disponible</div>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="col-12 col-md-8">
+
+                <span class="badge bg-danger mb-3">
+                    {{ type == 'movie' ? 'Film' : 'Série' }}
+                </span>
+
+                <h1 class="display-5 fw-bold mb-3">
+                    {{ title }}
+                </h1>
+
+                {% if media.tagline %}
+                    <p class="lead fst-italic text-secondary">
+                        {{ media.tagline }}
+                    </p>
+                {% endif %}
+
+                <div class="d-flex flex-wrap gap-3 mb-4">
+
+                    {% if releaseDate %}
+                        <span>
+                            <strong>Date :</strong>
+                            {{ releaseDate|date('d/m/Y') }}
+                        </span>
+                    {% endif %}
+
+                    {% if media.vote_average is defined %}
+                        <span>
+                            <strong>Note :</strong>
+                            {{ media.vote_average|number_format(1, ',', ' ') }}/10
+                        </span>
+                    {% endif %}
+
+                    {% if type == 'movie' and media.runtime %}
+                        <span>
+                            <strong>Durée :</strong>
+                            {{ media.runtime }} minutes
+                        </span>
+                    {% endif %}
+
+                    {% if type == 'tv' and media.number_of_seasons %}
+                        <span>
+                            <strong>Saisons :</strong>
+                            {{ media.number_of_seasons }}
+                        </span>
+                    {% endif %}
+
+                </div>
+
+                {% if media.genres is not empty %}
+                    <div class="d-flex flex-wrap gap-2 mb-4">
+                        {% for genre in media.genres %}
+                            <span class="badge text-bg-secondary">
+                                {{ genre.name }}
+                            </span>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                <h2 class="h4">
+                    Synopsis
+                </h2>
+
+                {% if media.overview %}
+                    <p class="text-secondary">
+                        {{ media.overview }}
+                    </p>
+                {% else %}
+                    <p class="text-secondary">
+                        Aucun synopsis disponible.
+                    </p>
+                {% endif %}
+
+
+                {% if type == 'movie' %}
+                    {% set cast = media.credits.cast ?? [] %}
+                {% else %}
+                    {% set cast = media.aggregate_credits.cast ?? [] %}
+                {% endif %}
+
+
+                                
+                {% if type == 'movie' %}
+                    {% set cast = media.credits.cast ?? [] %}
+                {% else %}
+                    {% set cast = media.aggregate_credits.cast ?? [] %}
+                {% endif %}
+
+                {% if cast %}
+                <section class="mt-5">
+
+                    <h2 class="h3 mb-4">
+                        Casting
+                    </h2>
+
+                    <div
+                        class="d-flex gap-3 overflow-auto pb-3"
+                        style="scrollbar-width: thin;"
+                    >
+
+                        {% for actor in cast|slice(0, 15) %}
+
+                            <div
+                                class="card bg-dark text-light border-secondary flex-shrink-0"
+                                style="width: 160px;"
+                            >
+
+                                {% if actor.profile_path %}
+
+                                    <img
+                                        src="https://image.tmdb.org/t/p/w185{{ actor.profile_path }}"
+                                        class="card-img-top"
+                                        style="height: 240px; object-fit: cover;"
+                                        alt="{{ actor.name }}"
+                                    >
+
+                                {% else %}
+
+                                    <div
+                                        class="d-flex align-items-center justify-content-center bg-secondary text-light"
+                                        style="height: 240px;"
+                                    >
+                                        🖼️
+                                    </div>
+
+                                {% endif %}
+
+
+                                <div class="card-body p-2 text-center">
+
+                                    <h3 class="h6 mb-1">
+                                        {{ actor.name }}
+                                    </h3>
+
+                                    <p class="small text-secondary mb-0">
+                                        {{ actor.character ?? actor.roles[0].character ?? '' }}
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+                        {% endfor %}
+
+                    </div>
+
+                </section>
+                {% endif %}
+
+
+                {% set trailer = null %}
+
+                {% for video in media.videos.results ?? [] %}
+                    {% if trailer is null
+                        and video.site == 'YouTube'
+                        and video.type == 'Trailer'
+                    %}
+                        {% set trailer = video %}
+                    {% endif %}
+                {% endfor %}
+
+                {% if trailer %}
+                    <section class="mt-5">
+                        <h2 class="h3 mb-3">Bande-annonce</h2>
+
+                        <div class="ratio ratio-16x9">
+                            <iframe
+                                src="https://www.youtube.com/embed/{{ trailer.key }}"
+                                title="Bande-annonce de {{ title }}"
+                                allowfullscreen
+                            ></iframe>
+                        </div>
+                    </section>
+                {% endif %}
+
+
+
+{% set watchProviders = media['watch/providers'].results.FR ?? null %}
+
+{% if watchProviders %}
+
+<section class="mt-5">
+
+    <h2 class="h3 mb-4">
+        Où regarder
+    </h2>
+
+
+    {% set providers = watchProviders %}
+
+
+    {% if providers.flatrate is defined and providers.flatrate|length > 0 %}
+
+        <h3 class="h5 text-secondary mb-3">
+            Disponible en streaming
+        </h3>
+
+
+        <div class="d-flex flex-wrap gap-3 mb-4">
+
+            {% set displayedStreaming = [] %}
+
+            {% for provider in providers.flatrate %}
+
+                {% if provider.provider_id not in displayedStreaming %}
+
+                    {% set displayedStreaming = displayedStreaming|merge([provider.provider_id]) %}
+
+                    <a
+                        href="{{ watchProviders.link ?? '#' }}"
+                        target="_blank"
+                        title="{{ provider.provider_name }}"
+                    >
+                        <img
+                            src="https://image.tmdb.org/t/p/w92{{ provider.logo_path }}"
+                            width="55"
+                            height="55"
+                            class="rounded"
+                            alt="{{ provider.provider_name }}"
+                        >
+                    </a>
+
+                {% endif %}
+
+            {% endfor %}
+
+        </div>
+
+    {% endif %}
+
+
+
+    {% set purchaseProviders = [] %}
+
+    {% for provider in providers.rent ?? [] %}
+        {% set purchaseProviders = purchaseProviders|merge([provider]) %}
+    {% endfor %}
+
+    {% for provider in providers.buy ?? [] %}
+        {% set purchaseProviders = purchaseProviders|merge([provider]) %}
+    {% endfor %}
+
+
+
+    {% if purchaseProviders|length > 0 %}
+
+        <h3 class="h5 text-secondary mb-3">
+            Location / Achat
+        </h3>
+
+
+        <div class="d-flex flex-wrap gap-3">
+
+            {% set displayedPurchase = [] %}
+
+            {% for provider in purchaseProviders %}
+
+                {% if provider.provider_id not in displayedPurchase %}
+
+                    {% set displayedPurchase = displayedPurchase|merge([provider.provider_id]) %}
+
+                    <a
+                        href="{{ watchProviders.link ?? '#' }}"
+                        target="_blank"
+                        title="{{ provider.provider_name }}"
+                    >
+                        <img
+                            src="https://image.tmdb.org/t/p/w92{{ provider.logo_path }}"
+                            width="55"
+                            height="55"
+                            class="rounded"
+                            alt="{{ provider.provider_name }}"
+                        >
+                    </a>
+
+                {% endif %}
+
+            {% endfor %}
+
+        </div>
+
+    {% endif %}
+
+
+    <p class="small text-secondary mt-3">
+        Données de disponibilité fournies par JustWatch.
+    </p>
+
+</section>
+
+{% endif %}
+
+
+
+
+ {% if media.similar.results is defined and media.similar.results|length > 0 %}
+
+<section class="mt-5">
+
+    <h2 class="h3 mb-4">
+        Vous pourriez aimer
+    </h2>
+
+
+    <div
+        class="d-flex gap-3 overflow-auto pb-3"
+        style="scrollbar-width: thin;"
+    >
+
+        {% for similar in media.similar.results|slice(0, 15) %}
+
+            {% set similarTitle = similar.title ?? similar.name %}
+            {% set similarImage = similar.poster_path %}
+
+
+            {% if type == 'movie' %}
+                {% set similarPath = path('app_movie_details', {
+                    id: similar.id
+                }) %}
+            {% else %}
+                {% set similarPath = path('app_tv_details', {
+                    id: similar.id
+                }) %}
+            {% endif %}
+
+
+            <a
+                href="{{ similarPath }}"
+                class="text-decoration-none"
+            >
+
+                <div
+                    class="card bg-dark text-light border-secondary flex-shrink-0"
+                    style="width: 180px;"
+                >
+
+                    {% if similarImage %}
+
+                        <img
+                            src="https://image.tmdb.org/t/p/w500{{ similarImage }}"
+                            class="card-img-top"
+                            style="height: 270px; object-fit: cover;"
+                            alt="{{ similarTitle }}"
+                        >
+
+                    {% else %}
+
+                        <div
+                            class="d-flex align-items-center justify-content-center bg-secondary text-light"
+                            style="height: 270px;"
+                        >
+                            🖼️
+                        </div>
+
+                    {% endif %}
+
+
+                    <div class="card-body p-2">
+
+                        <h3 class="h6 mb-0 text-light">
+                            {{ similarTitle }}
+                        </h3>
+
+                    </div>
+
+                </div>
+
+            </a>
+
+
+        {% endfor %}
+
+    </div>
+
+</section>
+
+{% endif %}
+
+                <a
+                    href="{{ app.request.headers.get('referer') ?? path('app_search') }}"
+                    class="btn btn-outline-light mt-3"
+                >
+                    Retour
+                </a>
+
+            </div>
+
+        </div>
+    </section>
+{% endblock %}

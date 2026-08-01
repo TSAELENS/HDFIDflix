@@ -94,51 +94,79 @@
 						</p>
 					{% else %}
 						<div class="row g-4">
-							{% for result in results %}
-								{% set title = result.title ?? result.name ?? 'Sans titre' %}
-								{% set image = result.poster_path ?? result.profile_path ?? null %}
+                        {% for result in results %}
+                            {% set title = result.title ?? result.name ?? 'Sans titre' %}
+                            {% set image = result.poster_path ?? result.profile_path ?? null %}
+                            {% set detailsPath = null %}
 
-								<div class="col-12 col-md-6 col-xl-4">
-									<article class="card h-100 bg-dark text-light border-secondary">
-                                        {% if image %}
-                                        <div class="ratio" style="--bs-aspect-ratio: 150%;">
+                            {% if selectedType == 'movie' %}
+                                {% set detailsPath = path('app_movie_details', {
+                                    id: result.id
+                                }) %}
+                            {% elseif selectedType == 'tv' %}
+                                {% set detailsPath = path('app_tv_details', {
+                                    id: result.id
+                                }) %}
+                            {% endif %}
+
+                            <div class="col-12 col-md-6 col-xl-4">
+                                {% if detailsPath %}
+                                    <a
+                                        href="{{ detailsPath }}"
+                                        class="text-decoration-none"
+                                    >
+                                {% endif %}
+
+                                <article class="card h-100 bg-dark text-light border-secondary">
+                                    {% if image %}
+                                        <div
+                                            class="ratio"
+                                            style="--bs-aspect-ratio: 150%;"
+                                        >
                                             <img
                                                 src="https://image.tmdb.org/t/p/w500{{ image }}"
-                                                class="card-img-top"
+                                                class="card-img-top object-fit-cover"
                                                 alt="{{ title }}"
                                             >
                                         </div>
-                                        {% else %}
-                                        <div class="ratio bg-secondary-subtle text-secondary" style="--bs-aspect-ratio: 150%;">
+                                    {% else %}
+                                        <div
+                                            class="ratio bg-secondary-subtle text-secondary"
+                                            style="--bs-aspect-ratio: 150%;"
+                                        >
                                             <div class="d-flex align-items-center justify-content-center">
-                                                    <div class="text-center">
+                                                <div class="text-center">
                                                     <div class="fs-1 mb-2">🖼️</div>
                                                     <div>Image non disponible</div>
                                                 </div>
                                             </div>
                                         </div>
-                                        {% endif %}
+                                    {% endif %}
 
-										<div class="card-body">
-											<span class="badge bg-secondary mb-2">
-												{% if selectedType == 'movie' %}
-													Film
-												{% elseif selectedType == 'tv' %}
-													Série
-                                                {% elseif selectedType == 'person' %}
-													Personne
-                                                {% else %}
-                                                    Autre
-												{% endif %}
-											</span>
+                                    <div class="card-body">
+                                        <span class="badge bg-secondary mb-2">
+                                            {% if selectedType == 'movie' %}
+                                                Film
+                                            {% elseif selectedType == 'tv' %}
+                                                Série
+                                            {% elseif selectedType == 'person' %}
+                                                Personne
+                                            {% else %}
+                                                Autre
+                                            {% endif %}
+                                        </span>
 
-											<h2 class="h5">
-												{{ title }}
-											</h2>
-										</div>
-									</article>
-								</div>
-							{% endfor %}
+                                        <h2 class="h5">
+                                            {{ title }}
+                                        </h2>
+                                    </div>
+                                </article>
+
+                                {% if detailsPath %}
+                                    </a>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
 						</div>
 					{% endif %}
 				</div>
