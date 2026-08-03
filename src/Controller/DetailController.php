@@ -30,4 +30,18 @@ final class DetailController extends AbstractController
             'type' => 'tv',
         ]);
     }
+
+    #[Route('/person/{id}', name: 'app_person_details', requirements: ['id' => '\d+'])]
+    public function person(
+        int $id,
+        TmdbService $tmdbService
+    ): Response
+    {
+        $person = $tmdbService->getPersonDetails($id);
+
+        return $this->render('detail/person.html.twig', [
+            'person' => $person,
+        ]);
+    }
+
 }

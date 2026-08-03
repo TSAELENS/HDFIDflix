@@ -69,6 +69,23 @@ final class TmdbService
         return $response->toArray();
     }
 
+        public function getPersonDetails(int $id): array
+    {
+        $response = $this->httpClient->request(
+            'GET',
+            self::BASE_URL . '/person/' . $id,
+            [
+                'auth_bearer' => $this->apiToken,
+                'query' => [
+                    'language' => 'fr-FR',
+                    'append_to_response' => 'combined_credits',
+                ],
+            ],
+        );
+
+        return $response->toArray();
+    }
+
         public function getPopularMovies(): array
     {
         $response = $this->httpClient->request(

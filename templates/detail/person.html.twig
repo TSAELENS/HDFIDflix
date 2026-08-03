@@ -1,0 +1,183 @@
+{% extends 'base.html.twig' %}
+
+{% set name = person.name %}
+
+{% block title %}
+    {{ name }} - HDFIDflix
+{% endblock %}
+
+{% block body %}
+
+<section class="py-5">
+
+    <div class="row g-5">
+
+        <div class="col-12 col-md-4">
+
+            {% if person.profile_path %}
+
+                <img
+                    src="https://image.tmdb.org/t/p/w500{{ person.profile_path }}"
+                    class="img-fluid rounded shadow"
+                    alt="{{ name }}"
+                >
+
+            {% else %}
+
+                <div
+                    class="d-flex align-items-center justify-content-center bg-secondary text-light rounded"
+                    style="height: 500px;"
+                >
+                    🖼️
+                </div>
+
+            {% endif %}
+
+        </div>
+
+
+        <div class="col-12 col-md-8">
+
+            <h1 class="display-5 fw-bold mb-4">
+                {{ name }}
+            </h1>
+
+
+            {% if person.birthday %}
+
+                <p>
+                    <strong>Date de naissance :</strong>
+                    {{ person.birthday|date('d/m/Y') }}
+                </p>
+
+            {% endif %}
+
+
+            {% if person.place_of_birth %}
+
+                <p>
+                    <strong>Lieu de naissance :</strong>
+                    {{ person.place_of_birth }}
+                </p>
+
+            {% endif %}
+
+
+            {% if person.known_for_department %}
+
+                <p>
+                    <strong>Métier :</strong>
+                    {{ person.known_for_department }}
+                </p>
+
+            {% endif %}
+
+
+            {% if person.biography %}
+
+                <h2 class="h3 mt-5 mb-3">
+                    Biographie
+                </h2>
+
+                <p class="text-secondary">
+                    {{ person.biography }}
+                </p>
+
+            {% endif %}
+
+
+                <a
+                    href="{{ app.request.headers.get('referer') ?? path('app_search') }}"
+                    class="btn btn-outline-light mt-3"
+                >
+                    Retour
+                </a>
+
+        </div>
+
+    </div>
+
+
+    {% if person.combined_credits.cast is defined and person.combined_credits.cast|length > 0 %}
+
+    <section class="mt-5">
+
+        <h2 class="h3 mb-4">
+            Filmographie
+        </h2>
+
+
+        <div
+            class="d-flex gap-3 overflow-auto pb-3"
+            style="scrollbar-width: thin;"
+        >
+
+            {% for media in person.combined_credits.cast|slice(0, 15) %}
+
+                {% set title = media.title ?? media.name %}
+                {% set image = media.poster_path %}
+
+
+                {% if media.media_type == 'movie' %}
+                    {% set mediaPath = path('app_movie_details', {
+                        id: media.id
+                    }) %}
+                {% elseif media.media_type == 'tv' %}
+                    {% set mediaPath = path('app_tv_details', {
+                        id: media.id
+                    }) %}
+                {% endif %}
+
+
+                <a
+                    href="{{ mediaPath }}"
+                    class="text-decoration-none"
+                >
+
+                    <div
+                        class="card bg-dark text-light border-secondary flex-shrink-0"
+                        style="width: 180px;"
+                    >
+
+                    {% if image %}
+
+                        <img
+                            src="https://image.tmdb.org/t/p/w500{{ image }}"
+                            class="card-img-top"
+                            style="height:270px; object-fit:cover;"
+                            alt="{{ title }}"
+                        >
+
+                    {% else %}
+
+                        <div
+                            class="d-flex align-items-center justify-content-center bg-secondary"
+                            style="height:270px;"
+                        >
+                            🖼️
+                        </div>
+
+                    {% endif %}
+
+
+                    <div class="card-body p-2">
+
+                        <h3 class="h6 mb-0">
+                            {{ title }}
+                        </h3>
+
+                    </div>
+
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+    </section>
+
+    {% endif %}
+
+</section>
+
+{% endblock %}

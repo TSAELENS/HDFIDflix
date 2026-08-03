@@ -103,10 +103,17 @@
                                 {% set detailsPath = path('app_movie_details', {
                                     id: result.id
                                 }) %}
+
                             {% elseif selectedType == 'tv' %}
                                 {% set detailsPath = path('app_tv_details', {
                                     id: result.id
                                 }) %}
+
+                            {% elseif selectedType == 'person' %}
+                                {% set detailsPath = path('app_person_details', {
+                                    id: result.id
+                                }) %}
+
                             {% endif %}
 
                             <div class="col-12 col-md-6 col-xl-4">
