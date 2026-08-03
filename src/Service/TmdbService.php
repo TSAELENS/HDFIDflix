@@ -16,6 +16,9 @@ final class TmdbService
     ) {
     }
 
+    /* ====================================================================== */
+    /*                          RECHERCHE GLOBALE                             */
+    /* ====================================================================== */
     public function search(string $query, int $page = 1): array
     {
         $response = $this->httpClient->request(
@@ -34,6 +37,10 @@ final class TmdbService
 
         return $response->toArray();
     }
+
+    /* ====================================================================== */
+    /*                     DÉTAILS DES CONTENUS TMDB                          */
+    /* ====================================================================== */
 
     public function getMovieDetails(int $id): array
     {
@@ -86,7 +93,11 @@ final class TmdbService
         return $response->toArray();
     }
 
-        public function getPopularMovies(): array
+    /* ====================================================================== */
+    /*                    CONTENUS DE LA PAGE D’ACCUEIL                       */
+    /* ====================================================================== */
+
+    public function getPopularMovies(): array
     {
         $response = $this->httpClient->request(
             'GET',

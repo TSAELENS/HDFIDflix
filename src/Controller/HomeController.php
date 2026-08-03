@@ -11,6 +11,11 @@ use App\Service\TmdbService;
 
 final class HomeController extends AbstractController
 {
+    /**
+     * Affiche la page d’accueil avec les contenus populaires
+     * et traite le formulaire de recherche global.
+     */
+    
     #[Route('/', name: 'app_home')]
     public function index(Request $request, TmdbService $tmdbService): Response
     {

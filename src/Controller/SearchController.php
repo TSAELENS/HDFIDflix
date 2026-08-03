@@ -13,6 +13,11 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 final class SearchController extends AbstractController
 {
+    /**
+     * Recherche un terme dans TMDB puis répartit
+     * les résultats selon leur type.
+     */
+
     #[Route('/search', name: 'app_search')]
     public function index(
         Request $request,

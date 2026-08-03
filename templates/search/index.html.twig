@@ -5,6 +5,9 @@
 
 {% block body %}
 
+{# ========================================================================== #}
+{#                           BARRE DE RECHERCHE                               #}
+{# ========================================================================== #}
 
 	<section class="py-4">
 		<div class="row justify-content-center">
@@ -32,6 +35,11 @@
 			</div>
 		</div>
 	</section>
+
+
+{# ========================================================================== #}
+{#                          RÉSULTATS DE RECHERCHE                            #}
+{# ========================================================================== #}
 
 	<section class="py-4">
 		{% if query %}
@@ -97,6 +105,8 @@
                         {% for result in results %}
                             {% set title = result.title ?? result.name ?? 'Sans titre' %}
                             {% set image = result.poster_path ?? result.profile_path ?? null %}
+                            
+                            {# La route de la fiche dépend du type de résultat TMDB. #}
                             {% set detailsPath = null %}
 
                             {% if selectedType == 'movie' %}

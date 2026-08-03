@@ -11,6 +11,10 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 final class DetailController extends AbstractController
 {
+    /* ====================================================================== */
+    /*                              FICHE FILM                                */
+    /* ====================================================================== */
+
     #[Route('/movie/{id}', name: 'app_movie_details', requirements: ['id' => '\d+'])]
     public function movie(int $id, TmdbService $tmdbService, EventDispatcherInterface $eventDispatcher): Response
     {
@@ -30,6 +34,10 @@ final class DetailController extends AbstractController
         ]);
     }
 
+    /* ====================================================================== */
+    /*                              FICHE SÉRIE                               */
+    /* ====================================================================== */
+
     #[Route('/tv/{id}', name: 'app_tv_details', requirements: ['id' => '\d+'])]
     public function tv(int $id, TmdbService $tmdbService, EventDispatcherInterface $eventDispatcher): Response
     {
@@ -42,6 +50,10 @@ final class DetailController extends AbstractController
             'type' => 'tv',
         ]);
     }
+
+    /* ====================================================================== */
+    /*                            FICHE PERSONNE                              */
+    /* ====================================================================== */
 
     #[Route('/person/{id}', name: 'app_person_details', requirements: ['id' => '\d+'])]
     public function person(int $id,TmdbService $tmdbService, EventDispatcherInterface $eventDispatcher): Response

@@ -4,39 +4,101 @@
 {% endblock %}
 
 {% block body %}
-	<section class="py-5 text-center">
-		<h1 class="display-4 fw-bold mb-3">
-			Vous vous demandez quel film regarder ce soir ?
-			<br>
-		</h1>
-		<h2 class="h4 fw-bold mb-4">
-			Ne cherchez plus, HDFIDflix est là pour vous aider à trouver le film parfait !
-		</h2>
 
-		<p class="lead text-secondary mb-4">
-			Recherchez dès maintenant votre film, série, artiste... afin d'obtenir toutes les informations dont vous avez besoin :
-		</p>
+	{# Film mis en avant #}
+	{% set featuredMovie = popularMovies is defined and popularMovies
+        ? popularMovies|first
+        : null
+    %}
 
-		<div class="row justify-content-center">
-			<div class="col-12 col-md-8 col-lg-6">
-				{{ form_start(form) }}
+{# ========================================================================== #}
+{#                         HERO DE LA PAGE D’ACCUEIL                          #}
+{# ========================================================================== #}
 
-				<div class="input-group input-group-lg">
-					{{ form_widget(form.query, {
-        attr: {
-            class: 'form-control',
-            placeholder: 'Rechercher un film, une série...'
-        }
-    }) }}
+	<section class="home-hero position-relative d-flex align-items-center" {% if featuredMovie and featuredMovie.backdrop_path %} style="background-image: url('https://image.tmdb.org/t/p/original{{ featuredMovie.backdrop_path }}');" {% endif %}>
+		<div class="home-hero-overlay"></div>
 
-					<button type="submit" class="btn btn-danger">
-						Rechercher
-					</button>
+		<div class="container home-hero-content py-5">
+			<div class="row">
+				<div class="col-12 col-lg-7">
+
+					<p class="text-hdfid-green text-uppercase fw-bold small mb-3">
+						À découvrir sur HDFIDflix
+					</p>
+
+					<h1 class="display-3 fw-bold text-white mb-3">
+						{{ featuredMovie.title ?? 'Trouvez votre prochain film' }}
+					</h1>
+
+					{% if featuredMovie and featuredMovie.overview %}
+						<p class="lead hero-description mb-4">
+							{{ featuredMovie.overview|slice(0, 240) }}
+
+							{% if featuredMovie.overview|length > 240 %}
+								…
+							{% endif %}
+						</p>
+					{% else %}
+						<p class="lead hero-description mb-4">
+							Découvrez les films, séries et personnalités
+							                            qui font l’actualité.
+						</p>
+					{% endif %}
+
+					<div class="hero-actions d-flex flex-column gap-3">
+
+						{% if featuredMovie %}
+							<a href="{{ path('app_movie_details', { id: featuredMovie.id }) }}" class="btn btn-hdfid rounded-4 shadow-sm px-4 py-3 align-self-start" data-turbo-prefetch="false">
+								Voir la fiche
+							</a>
+						{% endif %}
+
+						{# Recherche du hero #}
+						<div class="hero-search">
+							{{ form_start(form) }}
+
+								{{ form_widget(form.query, {
+									attr: {
+										class: 'form-control hero-search-input shadow-none',
+										placeholder: 'Rechercher un film, une série, une personne...'
+									}
+								}) }}
+
+								<button
+									type="submit"
+									class="btn btn-hdfid rounded-4 shadow-sm hero-search-button d-flex align-items-center justify-content-center"
+									aria-label="Rechercher"
+								>
+									<svg
+										xmlns="http://www.w3.org/2000/svg"
+										width="20"
+										height="20"
+										fill="none"
+										viewBox="0 0 24 24"
+										stroke="currentColor"
+										stroke-width="2"
+										aria-hidden="true"
+									>
+										<circle cx="11" cy="11" r="7"></circle>
+										<path d="m20 20-4-4"></path>
+									</svg>
+								</button>
+
+							{{ form_end(form) }}
+						</div>
+
+					</div>
+
 				</div>
-
-				{{ form_end(form) }}
 			</div>
 		</div>
+	</section>
+
+{# ========================================================================== #}
+{#                           FILMS POPULAIRES                                 #}
+{# ========================================================================== #}
+
+	<div class="container py-5">
 
 
 		{% if popularMovies %}
@@ -80,6 +142,9 @@
 			</section>
 		{% endif %}
 
+{# ========================================================================== #}
+{#                          SÉRIES POPULAIRES                                 #}
+{# ========================================================================== #}
 
 		{% if popularTv %}
 			<section class="mt-5">
@@ -122,6 +187,9 @@
 			</section>
 		{% endif %}
 
+{# ========================================================================== #}
+{#                        FILMS LES MIEUX NOTÉS                               #}
+{# ========================================================================== #}
 
 		{% if topRatedMovies %}
 			<section class="mt-5">
@@ -161,4 +229,5 @@
 
 
 	</section>
-{% endblock %}
+
+</div>{% endblock %}

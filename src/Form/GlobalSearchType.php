@@ -12,6 +12,11 @@ use Symfony\Component\Validator\Constraints\Length;
 
 class GlobalSearchType extends AbstractType
 {
+    /**
+     * Construit le formulaire de recherche
+     * à l’accueil et à la page de résultats.
+     */
+
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
@@ -27,9 +32,7 @@ class GlobalSearchType extends AbstractType
                         message: 'Veuillez saisir une recherche.',
                     ),
                     new Length(
-                        // min: 2,
                         max: 100,
-                        // minMessage: 'La recherche doit contenir au moins {{ limit }} caractères.',
                         maxMessage: 'La recherche ne peut pas dépasser {{ limit }} caractères.',
                     ),
                 ],

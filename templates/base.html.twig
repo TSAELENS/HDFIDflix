@@ -18,12 +18,63 @@
 		{% endblock %}
 	</head>
 
-	<body class="bg-dark text-light">
-		<nav class="navbar navbar-expand-lg navbar-dark bg-black border-bottom border-secondary">
+	{% set isHome = app.request.attributes.get('_route') == 'app_home' %}
+
+	<body class="bg-dark text-light {{ isHome ? 'home-page' : '' }}">
+
+    {# ====================================================================== #}
+    {#                              NAVBAR                                #}
+    {# ====================================================================== #}
+
+		<nav class="navbar navbar-expand-lg navbar-dark cinema-navbar py-3">
 			<div class="container">
-				<a class="navbar-brand fw-bold" href="{{ path('app_home') }}">
-					HDFIDflix
+
+				<a
+					class="navbar-brand cinema-brand"
+					href="{{ path('app_home') }}"
+				>
+					HDFID<span>flix</span>
 				</a>
+
+				<button
+					class="navbar-toggler border-0 shadow-none"
+					type="button"
+					data-bs-toggle="collapse"
+					data-bs-target="#mainNavigation"
+					aria-controls="mainNavigation"
+					aria-expanded="false"
+					aria-label="Ouvrir le menu"
+				>
+					<span class="navbar-toggler-icon"></span>
+				</button>
+
+				<div
+					class="collapse navbar-collapse"
+					id="mainNavigation"
+				>
+					<ul class="navbar-nav ms-auto align-items-lg-center gap-lg-4">
+
+						<li class="nav-item">
+							<a
+								class="nav-link {{ isHome ? 'active' : '' }}"
+								href="{{ path('app_home') }}"
+							>
+								Accueil
+							</a>
+						</li>
+
+						<li class="nav-item">
+							<a
+								class="nav-link {{ app.request.attributes.get('_route') == 'app_search' ? 'active' : '' }}"
+								href="{{ path('app_search') }}"
+							>
+								Rechercher
+							</a>
+						</li>
+
+					</ul>
+				</div>
+
 			</div>
 		</nav>
 

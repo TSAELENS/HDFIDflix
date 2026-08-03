@@ -9,6 +9,10 @@ use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 #[AsEventListener]
 final class ViewedListener
 {
+   /**
+    * Journalise chaque consultation d’une fiche.
+    */
+   
     public function __construct(
         private readonly LoggerInterface $logger,
     ) {
