@@ -69,4 +69,54 @@ final class TmdbService
         return $response->toArray();
     }
 
+        public function getPopularMovies(): array
+    {
+        $response = $this->httpClient->request(
+            'GET',
+            self::BASE_URL . '/movie/popular',
+            [
+                'auth_bearer' => $this->apiToken,
+                'query' => [
+                    'language' => 'fr-FR',
+                ],
+            ],
+        );
+
+        return $response->toArray()['results'];
+    }
+
+
+    public function getPopularTv(): array
+    {
+        $response = $this->httpClient->request(
+            'GET',
+            self::BASE_URL . '/tv/popular',
+            [
+                'auth_bearer' => $this->apiToken,
+                'query' => [
+                    'language' => 'fr-FR',
+                ],
+            ],
+        );
+
+        return $response->toArray()['results'];
+    }
+
+
+    public function getTopRatedMovies(): array
+    {
+        $response = $this->httpClient->request(
+            'GET',
+            self::BASE_URL . '/movie/top_rated',
+            [
+                'auth_bearer' => $this->apiToken,
+                'query' => [
+                    'language' => 'fr-FR',
+                ],
+            ],
+        );
+
+        return $response->toArray()['results'];
+    }
+
 }

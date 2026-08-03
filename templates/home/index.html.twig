@@ -38,5 +38,127 @@
 			</div>
 		</div>
 
+
+		{% if popularMovies %}
+			<section class="mt-5">
+
+				<h2 class="h3 mb-4">
+					🔥 Films populaires
+				</h2>
+
+				<div class="d-flex gap-3 overflow-auto pb-3" style="scrollbar-width: thin;">
+
+					{% for movie in popularMovies|slice(0, 15) %}
+
+						<a href="{{ path('app_movie_details', {id: movie.id}) }}" class="text-decoration-none">
+
+							<div class="card bg-dark text-light border-secondary flex-shrink-0" style="width: 180px;">
+
+								{% if movie.poster_path %}
+
+									<img src="https://image.tmdb.org/t/p/w500{{ movie.poster_path }}" class="card-img-top" style="height: 270px; object-fit: cover;" alt="{{ movie.title }}">
+
+								{% endif %}
+
+
+								<div class="card-body p-2">
+
+									<h3 class="h6 mb-0 text-light">
+										{{ movie.title }}
+									</h3>
+
+								</div>
+
+							</div>
+
+						</a>
+
+					{% endfor %}
+
+				</div>
+
+			</section>
+		{% endif %}
+
+
+		{% if popularTv %}
+			<section class="mt-5">
+
+				<h2 class="h3 mb-4">
+					📺 Séries populaires
+				</h2>
+
+				<div class="d-flex gap-3 overflow-auto pb-3" style="scrollbar-width: thin;">
+
+					{% for tv in popularTv|slice(0, 15) %}
+
+						<a href="{{ path('app_tv_details', {id: tv.id}) }}" class="text-decoration-none">
+
+							<div class="card bg-dark text-light border-secondary flex-shrink-0" style="width: 180px;">
+
+								{% if tv.poster_path %}
+
+									<img src="https://image.tmdb.org/t/p/w500{{ tv.poster_path }}" class="card-img-top" style="height: 270px; object-fit: cover;" alt="{{ tv.name }}">
+
+								{% endif %}
+
+
+								<div class="card-body p-2">
+
+									<h3 class="h6 mb-0 text-light">
+										{{ tv.name }}
+									</h3>
+
+								</div>
+
+							</div>
+
+						</a>
+
+					{% endfor %}
+
+				</div>
+
+			</section>
+		{% endif %}
+
+
+		{% if topRatedMovies %}
+			<section class="mt-5">
+
+				<h2 class="h3 mb-4">
+					⭐ Films les mieux notés
+				</h2>
+
+				<div class="d-flex gap-3 overflow-auto pb-3" style="scrollbar-width: thin;">
+
+					{% for movie in topRatedMovies|slice(0, 15) %}
+
+						<a href="{{ path('app_movie_details', {id: movie.id}) }}" class="text-decoration-none">
+
+							<div class="card bg-dark text-light border-secondary flex-shrink-0" style="width: 180px;">
+
+								<img src="https://image.tmdb.org/t/p/w500{{ movie.poster_path }}" class="card-img-top" style="height: 270px; object-fit: cover;" alt="{{ movie.title }}">
+
+								<div class="card-body p-2">
+
+									<h3 class="h6 mb-0 text-light">
+										{{ movie.title }}
+									</h3>
+
+								</div>
+
+							</div>
+
+						</a>
+
+					{% endfor %}
+
+				</div>
+
+			</section>
+		{% endif %}
+
+
 	</section>
 {% endblock %}
