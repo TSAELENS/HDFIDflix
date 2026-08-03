@@ -8,13 +8,16 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use App\Event\SearchEvent;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 final class SearchController extends AbstractController
 {
     #[Route('/search', name: 'app_search')]
     public function index(
         Request $request,
-        TmdbService $tmdbService
+        TmdbService $tmdbService,
+        EventDispatcherInterface $eventDispatcher
     ): Response {
         $form = $this->createForm(GlobalSearchType::class);
 
@@ -31,8 +34,11 @@ final class SearchController extends AbstractController
         if (!$query) {
             return $this->redirectToRoute('app_home');
         }
-        
-        if ($query !== '') {
+
+        if ($query !== '') {                  
+            $eventDispatcher->dispatch(
+                new SearchEvent($query) 
+            );
             $response = $tmdbService->search($query);
             $results = $response['results'] ?? [];
 

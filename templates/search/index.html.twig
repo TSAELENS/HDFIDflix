@@ -48,7 +48,7 @@
 						</div>
 
 						<div class="list-group list-group-flush">
-							<a href="{{ path('app_search', { query: query, type: 'movie' }) }}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center {{ selectedType == 'movie' ? 'active' : '' }}">
+							<a href="{{ path('app_search', { query: query, type: 'movie' }) }}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center {{ selectedType == 'movie' ? 'active' : '' }}" data-turbo-prefetch="false">
 								Films
 
 								<span class="badge rounded-pill text-bg-secondary">
@@ -56,7 +56,7 @@
 								</span>
 							</a>
 
-							<a href="{{ path('app_search', { query: query, type: 'tv' }) }}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center {{ selectedType == 'tv' ? 'active' : '' }}">
+							<a href="{{ path('app_search', { query: query, type: 'tv' }) }}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center {{ selectedType == 'tv' ? 'active' : '' }}" data-turbo-prefetch="false">
 								Séries
 
 								<span class="badge rounded-pill text-bg-secondary">
@@ -64,7 +64,7 @@
 								</span>
 							</a>
 
-							<a href="{{ path('app_search', { query: query, type: 'person' }) }}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center {{ selectedType == 'person' ? 'active' : '' }}">
+							<a href="{{ path('app_search', { query: query, type: 'person' }) }}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center {{ selectedType == 'person' ? 'active' : '' }}" data-turbo-prefetch="false">
 								Personnes
 
 								<span class="badge rounded-pill text-bg-secondary">
@@ -76,7 +76,7 @@
 							</a>
 
 
-							<a href="{{ path('app_search', {query: query, type: 'other'	}) }}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center {{ selectedType == 'other' ? 'active' : '' }}">
+							<a href="{{ path('app_search', {query: query, type: 'other'	}) }}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center {{ selectedType == 'other' ? 'active' : '' }}" data-turbo-prefetch="false">
 								Autres
 
 								<span class="badge rounded-pill text-bg-secondary">
@@ -121,6 +121,7 @@
                                     <a
                                         href="{{ detailsPath }}"
                                         class="text-decoration-none"
+                                        data-turbo-prefetch="false"
                                     >
                                 {% endif %}
 

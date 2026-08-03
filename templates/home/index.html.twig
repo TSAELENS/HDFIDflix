@@ -50,7 +50,7 @@
 
 					{% for movie in popularMovies|slice(0, 15) %}
 
-						<a href="{{ path('app_movie_details', {id: movie.id}) }}" class="text-decoration-none">
+						<a href="{{ path('app_movie_details', {id: movie.id}) }}" class="text-decoration-none" data-turbo-prefetch="false">
 
 							<div class="card bg-dark text-light border-secondary flex-shrink-0" style="width: 180px;">
 
@@ -92,7 +92,7 @@
 
 					{% for tv in popularTv|slice(0, 15) %}
 
-						<a href="{{ path('app_tv_details', {id: tv.id}) }}" class="text-decoration-none">
+						<a href="{{ path('app_tv_details', {id: tv.id}) }}" class="text-decoration-none" data-turbo-prefetch="false">
 
 							<div class="card bg-dark text-light border-secondary flex-shrink-0" style="width: 180px;">
 
@@ -134,7 +134,7 @@
 
 					{% for movie in topRatedMovies|slice(0, 15) %}
 
-						<a href="{{ path('app_movie_details', {id: movie.id}) }}" class="text-decoration-none">
+						<a href="{{ path('app_movie_details', {id: movie.id}) }}" class="text-decoration-none" data-turbo-prefetch="false">
 
 							<div class="card bg-dark text-light border-secondary flex-shrink-0" style="width: 180px;">
 
