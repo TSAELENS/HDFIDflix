@@ -294,6 +294,222 @@ body {
 }
 
 /* ========================================================================== */
+/*                           PAGE DE RECHERCHE                                */
+/* ========================================================================== */
+
+.search-page {
+    min-height: 75vh;
+}
+
+.search-tabs {
+    scrollbar-width: thin;
+    scrollbar-color: var(--hdfid-green) transparent;
+}
+
+.search-tab {
+    flex-shrink: 0;
+
+    color: rgba(255, 255, 255, 0.72);
+    background-color: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+
+    transition:
+        color 0.2s ease,
+        background-color 0.2s ease,
+        border-color 0.2s ease;
+}
+
+.search-tab:hover,
+.search-tab:focus {
+    color: #ffffff;
+    background-color: rgba(255, 255, 255, 0.08);
+    border-color: rgba(149, 193, 31, 0.45);
+}
+
+.search-tab.active {
+    color: var(--hdfid-blue-dark) !important;
+    background-color: var(--hdfid-green) !important;
+    border-color: var(--hdfid-green);
+}
+
+.search-results .media-card {
+    width: 100%;
+}
+
+.search-results .media-card-image-wrapper {
+    height: auto;
+    aspect-ratio: 2 / 3;
+}
+
+/* ========================================================================== */
+/*                           PAGE DE DÉTAIL                                   */
+/* ========================================================================== */
+
+.detail-hero {
+    min-height: 720px;
+    background-color: var(--hdfid-blue-dark);
+}
+
+.detail-hero-backdrop {
+    position: absolute;
+    inset: 0;
+
+    background-position: center;
+    background-size: cover;
+
+    transform: scale(1.02);
+}
+
+.detail-hero-overlay {
+    position: absolute;
+    inset: 0;
+
+    background:
+        linear-gradient(
+            to bottom,
+            rgba(15, 16, 36, 0.08) 45%,
+            var(--page-background) 100%
+        ),
+        linear-gradient(
+            90deg,
+            rgba(8, 8, 24, 0.98) 0%,
+            rgba(15, 16, 36, 0.88) 43%,
+            rgba(15, 16, 36, 0.35) 100%
+        );
+}
+
+.detail-hero-content {
+    min-height: 720px;
+    padding-top: 7rem;
+    padding-bottom: 6rem;
+}
+
+.detail-poster {
+    width: 100%;
+    aspect-ratio: 2 / 3;
+    object-fit: cover;
+
+    border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.detail-type-badge {
+    color: var(--hdfid-blue-dark);
+    background-color: var(--hdfid-green);
+}
+
+.detail-meta-item {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 0.9rem;
+
+    background-color: rgba(15, 16, 36, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(8px);
+}
+
+.detail-genre {
+    color: rgba(255, 255, 255, 0.8);
+    background-color: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.detail-overview {
+    max-width: 850px;
+
+    color: rgba(255, 255, 255, 0.82);
+    line-height: 1.75;
+}
+
+@media (max-width: 767.98px) {
+    .detail-hero-content {
+        min-height: auto;
+        padding-top: 7rem;
+        padding-bottom: 5rem;
+    }
+
+    .detail-hero-overlay {
+        background:
+            linear-gradient(
+                to bottom,
+                rgba(8, 8, 24, 0.45) 0%,
+                var(--page-background) 100%
+            );
+    }
+}
+
+/* CASTING */
+.cast-card {
+    width: 160px;
+}
+
+.cast-card-image-wrapper {
+    height: 240px;
+}
+
+/* BANDE-ANNONCE */
+.trailer-frame {
+    max-width: 1100px;
+
+    background-color: var(--hdfid-blue-dark);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.trailer-frame iframe {
+    border: 0;
+}
+
+/* PLATEFORMES DISPONIBLES */
+
+.provider-logo-link {
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.provider-logo-link:hover {
+    box-shadow: 0 7px 20px rgba(149, 193, 31, 0.18);
+    transform: translateY(-3px);
+}
+
+.provider-logo-link img {
+    display: block;
+}
+
+/* ========================================================================== */
+/*                           PAGE D’UNE PERSONNE                              */
+/* ========================================================================== */
+
+.person-hero {
+    background:
+        radial-gradient(
+            circle at 85% 20%,
+            rgba(149, 193, 31, 0.1),
+            transparent 30%
+        ),
+        linear-gradient(
+            to bottom,
+            var(--hdfid-blue-dark),
+            var(--page-background)
+        );
+}
+
+.person-biography {
+    max-width: 900px;
+
+    color: rgba(255, 255, 255, 0.78);
+    line-height: 1.8;
+}
+
+@media (max-width: 767.98px) {
+    .person-hero {
+        text-align: center;
+    }
+
+    .person-biography h2 {
+        justify-content: center;
+    }
+}
+
+/* ========================================================================== */
 /*                              RESPONSIVE                                     */
 /* ========================================================================== */
 

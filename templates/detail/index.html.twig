@@ -22,350 +22,444 @@
 	{#                        INFORMATIONS PRINCIPALES                            #}
 	{# ========================================================================== #}
 
-		<section class="py-5"> <div class="row g-5">
+		<section class="detail-hero position-relative overflow-hidden"> {% if media.backdrop_path is defined and media.backdrop_path %}
+			<div class="detail-hero-backdrop" style="background-image: url('https://image.tmdb.org/t/p/original{{ media.backdrop_path }}');"></div>
+		{% endif %}
 
-			<div class="col-12 col-md-4">
-				{% if media.poster_path %}
-					<img src="https://image.tmdb.org/t/p/w500{{ media.poster_path }}" class="img-fluid rounded shadow" alt="{{ title }}">
-				{% else %}
-					<div class="ratio bg-secondary-subtle text-secondary rounded" style="--bs-aspect-ratio: 150%;">
-						<div class="d-flex align-items-center justify-content-center">
-							<div class="text-center">
-								<div class="fs-1 mb-2">🖼️</div>
-								<div>Image non disponible</div>
-							</div>
+		<div class="detail-hero-overlay"></div>
+
+		<div class="container position-relative z-2">
+
+			<div
+				class="row align-items-end g-4 g-lg-5 detail-hero-content">
+
+				{# Affiche #}
+				<div class="col-8 col-sm-6 col-md-4 col-lg-3 mx-auto mx-md-0">
+
+					{% if media.poster_path %}
+
+						<img src="https://image.tmdb.org/t/p/w500{{ media.poster_path }}" class="detail-poster rounded-4 shadow-lg" alt="{{ title }}">
+
+					{% else %}
+
+						<div class="detail-poster rounded-4 bg-secondary d-flex align-items-center justify-content-center text-white-50 text-center p-4">
+							Image indisponible
 						</div>
-					</div>
-				{% endif %}
-			</div>
 
-			<div class="col-12 col-md-8">
-
-				<span class="badge bg-danger mb-3">
-					{{ type == 'movie' ? 'Film' : 'Série' }}
-				</span>
-
-				<h1 class="display-5 fw-bold mb-3">
-					{{ title }}
-				</h1>
-
-				{% if media.tagline %}
-					<p class="lead fst-italic text-secondary">
-						{{ media.tagline }}
-					</p>
-				{% endif %}
-
-				<div class="d-flex flex-wrap gap-3 mb-4">
-
-					{% if releaseDate %}
-						<span>
-							<strong>Date :</strong>
-							{{ releaseDate|date('d/m/Y') }}
-						</span>
-					{% endif %}
-
-					{% if media.vote_average is defined %}
-						<span>
-							<strong>Note :</strong>
-							{{ media.vote_average|number_format(1, ',', ' ') }}/10
-						</span>
-					{% endif %}
-
-					{% if type == 'movie' and media.runtime %}
-						<span>
-							<strong>Durée :</strong>
-							{{ media.runtime }}
-							minutes
-						</span>
-					{% endif %}
-
-					{% if type == 'tv' and media.number_of_seasons %}
-						<span>
-							<strong>Saisons :</strong>
-							{{ media.number_of_seasons }}
-						</span>
 					{% endif %}
 
 				</div>
 
-				{% if media.genres is not empty %}
-					<div class="d-flex flex-wrap gap-2 mb-4">
-						{% for genre in media.genres %}
-							<span class="badge text-bg-secondary">
-								{{ genre.name }}
-							</span>
-						{% endfor %}
-					</div>
-				{% endif %}
-
-				<h2 class="h4">
-					Synopsis
-				</h2>
-
-				{% if media.overview %}
-					<p class="text-secondary">
-						{{ media.overview }}
-					</p>
-				{% else %}
-					<p class="text-secondary">
-						Aucun synopsis disponible.
-					</p>
-				{% endif %}
-
-				{# ========================================================================== #}
-				{#                                  CASTING                                   #}
-				{# ========================================================================== #}
-
-
-
-				{% if type == 'movie' %}
-					{% set cast = media.credits.cast ?? [] %}
-				{% else %}
-					{% set cast = media.aggregate_credits.cast ?? [] %}
-				{% endif %}
-
-				{% if cast %}
-					<section class="mt-5">
-
-						<h2 class="h3 mb-4">
-							Casting
-						</h2>
-
-						<div class="d-flex gap-3 overflow-auto pb-3" style="scrollbar-width: thin;">
-
-							{% for actor in cast|slice(0, 15) %}
-
-								<a href="{{ path('app_person_details', {id: actor.id}) }}" class="text-decoration-none" data-turbo-prefetch="false">
-
-									<div class="card bg-dark text-light border-secondary flex-shrink-0" style="width:160px;">
-
-
-										{% if actor.profile_path %}
-
-											<img src="https://image.tmdb.org/t/p/w185{{ actor.profile_path }}" class="card-img-top" style="height: 240px; object-fit: cover;" alt="{{ actor.name }}">
-
-										{% else %}
-
-											<div class="d-flex align-items-center justify-content-center bg-secondary text-light" style="height: 240px;">
-												🖼️
-											</div>
-
-										{% endif %}
-
-
-										<div class="card-body p-2 text-center">
-
-											<h3 class="h6 mb-1">
-												{{ actor.name }}
-											</h3>
-
-											<p class="small text-secondary mb-0">
-												{{ actor.character ?? actor.roles[0].character ?? '' }}
-											</p>
-
-										</div>
-
-									</div>
-								</a>
-
-							{% endfor %}
-
-						</div>
-
-					</section>
-				{% endif %}
-
-				{# ========================================================================== #}
-				{#                              BANDE-ANNONCE                                 #}
-				{# ========================================================================== #}
-
-				{% set trailer = null %}
-
-					{% for video in media.videos.results ?? [] %}
-						{% if trailer is null
-                        and video.site == 'YouTube'
-                        and video.type == 'Trailer'
-                    %}
-					{% set trailer = video %}
-				{% endif %}
-				{% endfor %}
-
-					{% if trailer %}
-						<section class="mt-5"> <h2 class="h3 mb-3">Bande-annonce</h2>
-
-						<div class="ratio ratio-16x9">
-							<iframe src="https://www.youtube.com/embed/{{ trailer.key }}" title="Bande-annonce de {{ title }}" allowfullscreen></iframe>
-						</div>
-					</section>
-				{% endif %}
-
-
-				{# ========================================================================== #}
-				{#                         PLATEFORMES DISPONIBLES                            #}
-				{# ========================================================================== #}
-
-				{% set watchProviders = media['watch/providers'].results.FR ?? null %}
-
-					{% if watchProviders %}
-
-						<section class="mt-5"> <h2 class="h3 mb-4">
-							Où regarder
-						</h2>
-
-
-						{% set providers = watchProviders %}
-
-
-						{% if providers.flatrate is defined and providers.flatrate|length > 0 %}
-
-							<h3 class="h5 text-secondary mb-3">
-								Disponible en streaming
-							</h3>
-
-
-							<div class="d-flex flex-wrap gap-3 mb-4">
-
-								{% set displayedStreaming = [] %}
-
-								{% for provider in providers.flatrate %}
-
-									{% if provider.provider_id not in displayedStreaming %}
-
-										{% set displayedStreaming = displayedStreaming|merge([provider.provider_id]) %}
-
-										<a href="{{ watchProviders.link ?? '#' }}" target="_blank" title="{{ provider.provider_name }}">
-											<img src="https://image.tmdb.org/t/p/w92{{ provider.logo_path }}" width="55" height="55" class="rounded" alt="{{ provider.provider_name }}">
-										</a>
-
-									{% endif %}
-
-								{% endfor %}
-
-							</div>
-
-						{% endif %}
-
-
-						{% set purchaseProviders = [] %}
-
-						{% for provider in providers.rent ?? [] %}
-							{% set purchaseProviders = purchaseProviders|merge([provider]) %}
-						{% endfor %}
-
-						{% for provider in providers.buy ?? [] %}
-							{% set purchaseProviders = purchaseProviders|merge([provider]) %}
-						{% endfor %}
-
-
-						{% if purchaseProviders|length > 0 %}
-
-							<h3 class="h5 text-secondary mb-3">
-								Location / Achat
-							</h3>
-
-
-							<div class="d-flex flex-wrap gap-3">
-
-								{% set displayedPurchase = [] %}
-
-								{% for provider in purchaseProviders %}
-
-									{% if provider.provider_id not in displayedPurchase %}
-
-										{% set displayedPurchase = displayedPurchase|merge([provider.provider_id]) %}
-
-										<a href="{{ watchProviders.link ?? '#' }}" target="_blank" title="{{ provider.provider_name }}">
-											<img src="https://image.tmdb.org/t/p/w92{{ provider.logo_path }}" width="55" height="55" class="rounded" alt="{{ provider.provider_name }}">
-										</a>
-
-									{% endif %}
-
-								{% endfor %}
-
-							</div>
-
-						{% endif %}
-
-
-						<p class="small text-secondary mt-3">
-							Données de disponibilité fournies par JustWatch.
+				{# Informations #}
+				<div class="col-12 col-md-8 col-lg-9">
+
+					<span class="detail-type-badge badge rounded-pill px-3 py-2 mb-3">
+						{{ type == 'movie' ? 'Film' : 'Série' }}
+					</span>
+
+					<h1 class="display-4 fw-bold text-white mb-3">
+						{{ title }}
+					</h1>
+
+					{% if media.tagline %}
+						<p class="lead fst-italic text-white-50 mb-4">
+							{{ media.tagline }}
 						</p>
+					{% endif %}
 
-					</section>
+					{# Informations rapides #}
+					<div class="d-flex flex-wrap gap-2 mb-4">
 
-				{% endif %}
+						{% if releaseDate %}
+							<span class="detail-meta-item rounded-pill px-3 py-2">
+								{{ releaseDate|date('Y') }}
+							</span>
+						{% endif %}
 
-				{# ========================================================================== #}
-				{#                            CONTENUS SIMILAIRES                             #}
-				{# ========================================================================== #}
+						{% if media.vote_average is defined %}
+							<span class="detail-meta-item rounded-pill px-3 py-2">
+								★
+								{{ media.vote_average|number_format(1, ',', ' ') }}/10
+							</span>
+						{% endif %}
 
-					{% if media.similar.results is defined and media.similar.results|length > 0 %}
+						{% if type == 'movie' and media.runtime %}
+							<span class="detail-meta-item rounded-pill px-3 py-2">
+								{{ media.runtime }}
+								min
+							</span>
+						{% endif %}
 
-						<section class="mt-5"> <h2 class="h3 mb-4">
-							Vous pourriez aimer
-						</h2>
+						{% if type == 'tv' and media.number_of_seasons %}
+							<span class="detail-meta-item rounded-pill px-3 py-2">
+								{{ media.number_of_seasons }}
+								saison{{ media.number_of_seasons > 1 ? 's' : '' }}
+							</span>
+						{% endif %}
 
+					</div>
 
-						<div class="d-flex gap-3 overflow-auto pb-3" style="scrollbar-width: thin;">
+					{# Genres #}
+					{% if media.genres is not empty %}
 
-							{% for similar in media.similar.results|slice(0, 15) %}
+						<div class="d-flex flex-wrap gap-2 mb-4">
 
-								{% set similarTitle = similar.title ?? similar.name %}
-								{% set similarImage = similar.poster_path %}
-
-
-								{% if type == 'movie' %}
-									{% set similarPath = path('app_movie_details', {
-                    id: similar.id
-                }) %}
-								{% else %}
-									{% set similarPath = path('app_tv_details', {
-                    id: similar.id
-                }) %}
-								{% endif %}
-
-
-								<a href="{{ similarPath }}" class="text-decoration-none" data-turbo-prefetch="false">
-
-									<div class="card bg-dark text-light border-secondary flex-shrink-0" style="width: 180px;">
-
-										{% if similarImage %}
-
-											<img src="https://image.tmdb.org/t/p/w500{{ similarImage }}" class="card-img-top" style="height: 270px; object-fit: cover;" alt="{{ similarTitle }}">
-
-										{% else %}
-
-											<div class="d-flex align-items-center justify-content-center bg-secondary text-light" style="height: 270px;">
-												🖼️
-											</div>
-
-										{% endif %}
-
-
-										<div class="card-body p-2">
-
-											<h3 class="h6 mb-0 text-light">
-												{{ similarTitle }}
-											</h3>
-
-										</div>
-
-									</div>
-
-								</a>
-
-
+							{% for genre in media.genres %}
+								<span class="detail-genre badge rounded-pill px-3 py-2">
+									{{ genre.name }}
+								</span>
 							{% endfor %}
 
 						</div>
 
-					</section>
+					{% endif %}
 
-				{% endif %}
+					{# Synopsis #}
+					<div class="detail-overview">
 
+						<h2 class="h4 fw-bold text-white mb-3">
+							Synopsis
+						</h2>
+
+						{% if media.overview %}
+							<p class="mb-0">
+								{{ media.overview }}
+							</p>
+						{% else %}
+							<p class="text-white-50 mb-0">
+								Aucun synopsis disponible.
+							</p>
+						{% endif %}
+
+					</div>
+
+				</div>
 
 			</div>
 
 		</div>
+
 	</section>
-{% endblock %}
+
+	<div class="container py-5">
+
+		{# ========================================================================== #}
+		{#                                  CASTING                                   #}
+		{# ========================================================================== #}
+
+			{% if type == 'movie' %}
+			{% set cast = media.credits.cast ?? [] %}
+		{% else %}
+			{% set cast = media.aggregate_credits.cast ?? [] %}
+		{% endif %}
+
+		{% if cast %}
+
+			<section class="mb-5">
+
+				<h2 class="h3 fw-bold text-white d-flex align-items-center gap-3 mb-4">
+					<span class="section-title-accent"></span>
+					Casting
+				</h2>
+
+				<div class="d-flex gap-3 overflow-auto pt-3 pb-3 media-row">
+
+					{% for actor in cast|slice(0, 15) %}
+
+						<a href="{{ path('app_person_details', { id: actor.id }) }}" class="text-decoration-none flex-shrink-0" data-turbo-prefetch="false">
+
+							<article class="media-card cast-card">
+
+								<div class="media-card-image-wrapper cast-card-image-wrapper rounded-4 overflow-hidden shadow">
+
+									{% if actor.profile_path %}
+
+										<img src="https://image.tmdb.org/t/p/w342{{ actor.profile_path }}" class="media-card-image" alt="{{ actor.name }}">
+
+									{% else %}
+
+										<div class="media-card-image d-flex align-items-center justify-content-center bg-secondary text-white-50 text-center p-3">
+											Image indisponible
+										</div>
+
+									{% endif %}
+
+									<div class="media-card-overlay"></div>
+
+								</div>
+
+								<div class="pt-3 px-1">
+
+									<h3 class="h6 fw-bold text-white text-truncate mb-1">
+										{{ actor.name }}
+									</h3>
+
+									{% set character =
+                                actor.character
+                                ?? actor.roles[0].character
+                                ?? null
+                            %}
+
+									{% if character %}
+										<p class="small text-white-50 text-truncate mb-0">
+											{{ character }}
+										</p>
+									{% endif %}
+
+								</div>
+
+							</article>
+
+						</a>
+
+					{% endfor %}
+
+				</div>
+
+			</section>
+
+		{% endif %}
+
+		{# ========================================================================== #}
+		{#                              BANDE-ANNONCE                                 #}
+		{# ========================================================================== #}
+
+		{% set trailer = null %}
+
+			{% for video in media.videos.results ?? [] %}
+				{% if trailer is null
+        and video.site == 'YouTube'
+        and video.type == 'Trailer'
+    %}
+			{% set trailer = video %}
+		{% endif %}
+		{% endfor %}
+
+			{% if trailer %}
+
+				<section class="mb-5"> <h2 class="h3 fw-bold text-white d-flex align-items-center gap-3 mb-4">
+					<span class="section-title-accent"></span>
+					Bande-annonce
+				</h2>
+
+				<div class="trailer-frame ratio ratio-16x9 rounded-4 overflow-hidden shadow-lg mx-auto">
+
+					<iframe src="https://www.youtube.com/embed/{{ trailer.key }}" title="Bande-annonce de {{ title }}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+
+				</div>
+
+			</section>
+
+		{% endif %}
+
+
+{# ========================================================================== #}
+{#                         PLATEFORMES DISPONIBLES                            #}
+{# ========================================================================== #}
+
+{% set watchProviders = media['watch/providers'].results.FR ?? null %}
+
+{% if watchProviders %}
+
+    <section class="mb-5">
+
+        <h2 class="h3 fw-bold text-white d-flex align-items-center gap-3 mb-4">
+            <span class="section-title-accent"></span>
+            Où regarder
+        </h2>
+
+        {% set providers = watchProviders %}
+
+        {# Streaming #}
+        {% if providers.flatrate is defined and providers.flatrate|length > 0 %}
+
+            <h3 class="h5 fw-semibold text-white-50 mb-3">
+                Disponible en streaming
+            </h3>
+
+            <div class="d-flex flex-wrap gap-3 mb-4">
+
+                {% set displayedStreaming = [] %}
+
+                {% for provider in providers.flatrate %}
+
+                    {% if provider.provider_id not in displayedStreaming %}
+
+                        {% set displayedStreaming = displayedStreaming|merge([
+                            provider.provider_id
+                        ]) %}
+
+                        <a
+                            href="{{ watchProviders.link ?? '#' }}"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="provider-logo-link d-inline-flex rounded-3"
+                            title="{{ provider.provider_name }}"
+                        >
+                            <img
+                                src="https://image.tmdb.org/t/p/w92{{ provider.logo_path }}"
+                                width="55"
+                                height="55"
+                                class="rounded-3 shadow-sm"
+                                alt="{{ provider.provider_name }}"
+                            >
+                        </a>
+
+                    {% endif %}
+
+                {% endfor %}
+
+            </div>
+
+        {% endif %}
+
+        {# Fusion de la location et de l’achat #}
+        {% set purchaseProviders = [] %}
+
+        {% for provider in providers.rent ?? [] %}
+            {% set purchaseProviders = purchaseProviders|merge([provider]) %}
+        {% endfor %}
+
+        {% for provider in providers.buy ?? [] %}
+            {% set purchaseProviders = purchaseProviders|merge([provider]) %}
+        {% endfor %}
+
+        {% if purchaseProviders|length > 0 %}
+
+            <h3 class="h5 fw-semibold text-white-50 mb-3">
+                Location / Achat
+            </h3>
+
+            <div class="d-flex flex-wrap gap-3">
+
+                {% set displayedPurchase = [] %}
+
+                {% for provider in purchaseProviders %}
+
+                    {% if provider.provider_id not in displayedPurchase %}
+
+                        {% set displayedPurchase = displayedPurchase|merge([
+                            provider.provider_id
+                        ]) %}
+
+                        <a
+                            href="{{ watchProviders.link ?? '#' }}"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="provider-logo-link d-inline-flex rounded-3"
+                            title="{{ provider.provider_name }}"
+                        >
+                            <img
+                                src="https://image.tmdb.org/t/p/w92{{ provider.logo_path }}"
+                                width="55"
+                                height="55"
+                                class="rounded-3 shadow-sm"
+                                alt="{{ provider.provider_name }}"
+                            >
+                        </a>
+
+                    {% endif %}
+
+                {% endfor %}
+
+            </div>
+
+        {% endif %}
+
+        <p class="small text-white-50 mt-3 mb-0">
+            Données de disponibilité fournies par JustWatch.
+        </p>
+
+    </section>
+
+{% endif %}
+
+{# ========================================================================== #}
+{#                            CONTENUS SIMILAIRES                             #}
+{# ========================================================================== #}
+
+{% if media.similar.results is defined and media.similar.results|length > 0 %}
+
+    <section class="mb-5">
+
+        <h2 class="h3 fw-bold text-white d-flex align-items-center gap-3 mb-4">
+            <span class="section-title-accent"></span>
+            Vous pourriez aimer
+        </h2>
+
+        <div class="d-flex gap-3 overflow-auto pt-3 pb-3 media-row">
+
+            {% for similar in media.similar.results|slice(0, 15) %}
+
+                {% set similarTitle = similar.title ?? similar.name ?? 'Sans titre' %}
+                {% set similarImage = similar.poster_path ?? null %}
+                {% set similarDate = similar.release_date ?? similar.first_air_date ?? null %}
+
+                {% if type == 'movie' %}
+                    {% set similarPath = path('app_movie_details', {
+                        id: similar.id
+                    }) %}
+                {% else %}
+                    {% set similarPath = path('app_tv_details', {
+                        id: similar.id
+                    }) %}
+                {% endif %}
+
+                <a
+                    href="{{ similarPath }}"
+                    class="text-decoration-none flex-shrink-0"
+                    data-turbo-prefetch="false"
+                >
+                    <article class="media-card">
+
+                        <div class="media-card-image-wrapper rounded-4 overflow-hidden shadow">
+
+                            {% if similarImage %}
+
+                                <img
+                                    src="https://image.tmdb.org/t/p/w500{{ similarImage }}"
+                                    class="media-card-image"
+                                    alt="{{ similarTitle }}"
+                                >
+
+                            {% else %}
+
+                                <div class="media-card-image d-flex align-items-center justify-content-center bg-secondary text-white-50 text-center p-3">
+                                    Image indisponible
+                                </div>
+
+                            {% endif %}
+
+                            <div class="media-card-overlay"></div>
+
+                        </div>
+
+                        <div class="pt-3 px-1">
+
+                            <h3 class="h6 fw-bold text-white text-truncate mb-1">
+                                {{ similarTitle }}
+                            </h3>
+
+                            {% if similarDate %}
+                                <p class="small text-white-50 mb-0">
+                                    {{ similarDate|date('Y') }}
+                                </p>
+                            {% endif %}
+
+                        </div>
+
+                    </article>
+                </a>
+
+            {% endfor %}
+
+        </div>
+
+    </section>
+
+{% endif %}
+
+
+	</div>
+
+</div></section>{% endblock %}

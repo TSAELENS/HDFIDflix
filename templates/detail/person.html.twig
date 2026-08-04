@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% set name = person.name %}
+{% set name = person.name ?? 'Sans nom' %}
 
 {% block title %}
     {{ name }} - HDFIDflix
@@ -8,7 +8,10 @@
 
 {% block body %}
 
-    {# Bouton retour fixe #}
+    {# ========================================================================== #}
+    {#                              BOUTON RETOUR                                #}
+    {# ========================================================================== #}
+
     <a
         href="{{ app.request.headers.get('referer') ?? path('app_home') }}"
         class="btn btn-hdfid rounded-4 shadow position-fixed bottom-0 start-0 ms-4 mb-5 z-3 d-inline-flex align-items-center gap-2 px-3 py-2"
@@ -29,176 +32,246 @@
         Retour
     </a>
 
-{# ========================================================================== #}
-{#                        INFORMATIONS DE LA PERSONNE                         #}
-{# ========================================================================== #}
-<section class="py-5">
+    {# ========================================================================== #}
+    {#                        INFORMATIONS DE LA PERSONNE                         #}
+    {# ========================================================================== #}
 
-    <div class="row g-5">
+    <section class="person-hero py-5">
 
-        <div class="col-12 col-md-4">
+        <div class="container py-lg-5">
 
-            {% if person.profile_path %}
+            <div class="row align-items-center g-4 g-lg-5">
 
-                <img
-                    src="https://image.tmdb.org/t/p/w500{{ person.profile_path }}"
-                    class="img-fluid rounded shadow"
-                    alt="{{ name }}"
-                >
+                {# Photo #}
+                <div class="col-8 col-sm-6 col-md-4 col-lg-3 mx-auto mx-md-0">
 
-            {% else %}
-
-                <div
-                    class="d-flex align-items-center justify-content-center bg-secondary text-light rounded"
-                    style="height: 500px;"
-                >
-                    🖼️
-                </div>
-
-            {% endif %}
-
-        </div>
-
-
-        <div class="col-12 col-md-8">
-
-            <h1 class="display-5 fw-bold mb-4">
-                {{ name }}
-            </h1>
-
-
-            {% if person.birthday %}
-
-                <p>
-                    <strong>Date de naissance :</strong>
-                    {{ person.birthday|date('d/m/Y') }}
-                </p>
-
-            {% endif %}
-
-
-            {% if person.place_of_birth %}
-
-                <p>
-                    <strong>Lieu de naissance :</strong>
-                    {{ person.place_of_birth }}
-                </p>
-
-            {% endif %}
-
-
-            {% if person.known_for_department %}
-
-                <p>
-                    <strong>Métier :</strong>
-                    {{ person.known_for_department }}
-                </p>
-
-            {% endif %}
-
-
-            {% if person.biography %}
-
-                <h2 class="h3 mt-5 mb-3">
-                    Biographie
-                </h2>
-
-                <p class="text-secondary">
-                    {{ person.biography }}
-                </p>
-
-            {% endif %}
-
-
-        </div>
-
-    </div>
-
-{# ========================================================================== #}
-{#                              FILMOGRAPHIE                                  #}
-{# ========================================================================== #}
-
-    {% if person.combined_credits.cast is defined and person.combined_credits.cast|length > 0 %}
-
-    <section class="mt-5">
-
-        <h2 class="h3 mb-4">
-            Filmographie
-        </h2>
-
-
-        <div
-            class="d-flex gap-3 overflow-auto pb-3"
-            style="scrollbar-width: thin;"
-        >
-
-            {% for media in person.combined_credits.cast|slice(0, 15) %}
-
-                {% set title = media.title ?? media.name %}
-                {% set image = media.poster_path %}
-
-
-                {% if media.media_type == 'movie' %}
-                    {% set mediaPath = path('app_movie_details', {
-                        id: media.id
-                    }) %}
-                {% elseif media.media_type == 'tv' %}
-                    {% set mediaPath = path('app_tv_details', {
-                        id: media.id
-                    }) %}
-                {% endif %}
-
-
-                <a
-                    href="{{ mediaPath }}"
-                    class="text-decoration-none"
-                    data-turbo-prefetch="false"
-                >
-
-                    <div
-                        class="card bg-dark text-light border-secondary flex-shrink-0"
-                        style="width: 180px;"
-                    >
-
-                    {% if image %}
+                    {% if person.profile_path %}
 
                         <img
-                            src="https://image.tmdb.org/t/p/w500{{ image }}"
-                            class="card-img-top"
-                            style="height:270px; object-fit:cover;"
-                            alt="{{ title }}"
+                            src="https://image.tmdb.org/t/p/w500{{ person.profile_path }}"
+                            class="detail-poster rounded-4 shadow-lg"
+                            alt="{{ name }}"
                         >
 
                     {% else %}
 
-                        <div
-                            class="d-flex align-items-center justify-content-center bg-secondary"
-                            style="height:270px;"
-                        >
-                            🖼️
+                        <div class="detail-poster rounded-4 bg-secondary d-flex align-items-center justify-content-center text-white-50 text-center p-4">
+                            Image indisponible
                         </div>
 
                     {% endif %}
 
+                </div>
 
-                    <div class="card-body p-2">
+                {# Informations #}
+                <div class="col-12 col-md-8 col-lg-9">
 
-                        <h3 class="h6 mb-0">
-                            {{ title }}
-                        </h3>
+                    <p class="text-hdfid-green text-uppercase fw-bold small mb-2">
+                        Personnalité
+                    </p>
+
+                    <h1 class="display-4 fw-bold text-white mb-4">
+                        {{ name }}
+                    </h1>
+
+                    <div class="d-flex flex-wrap gap-2 mb-4">
+
+                        {% if person.birthday %}
+
+                            <span class="detail-meta-item rounded-pill px-3 py-2">
+                                Né(e) le {{ person.birthday|date('d/m/Y') }}
+                            </span>
+
+                        {% endif %}
+
+                        {% if person.deathday %}
+
+                            <span class="detail-meta-item rounded-pill px-3 py-2">
+                                Décédé(e) le {{ person.deathday|date('d/m/Y') }}
+                            </span>
+
+                        {% endif %}
+
+                        {% if person.known_for_department %}
+
+                            <span class="detail-meta-item rounded-pill px-3 py-2">
+                                {{ person.known_for_department }}
+                            </span>
+
+                        {% endif %}
 
                     </div>
 
+                    {% if person.place_of_birth %}
+
+                        <p class="text-white-50 mb-4">
+
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="18"
+                                height="18"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                class="me-2"
+                                aria-hidden="true"
+                            >
+                                <path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z"></path>
+                                <circle cx="12" cy="10" r="3"></circle>
+                            </svg>
+
+                            {{ person.place_of_birth }}
+
+                        </p>
+
+                    {% endif %}
+
+                    {% if person.biography %}
+
+                        <div class="person-biography">
+
+                            <h2 class="h3 fw-bold text-white d-flex align-items-center gap-3 mb-3">
+                                <span class="section-title-accent"></span>
+                                Biographie
+                            </h2>
+
+                            <p class="mb-0">
+                                {{ person.biography }}
+                            </p>
+
+                        </div>
+
+                    {% else %}
+
+                        <div class="person-biography">
+
+                            <h2 class="h3 fw-bold text-white d-flex align-items-center gap-3 mb-3">
+                                <span class="section-title-accent"></span>
+                                Biographie
+                            </h2>
+
+                            <p class="text-white-50 mb-0">
+                                Aucune biographie disponible.
+                            </p>
+
+                        </div>
+
+                    {% endif %}
+
                 </div>
 
-            {% endfor %}
+            </div>
 
         </div>
 
     </section>
 
-    {% endif %}
+    {# ========================================================================== #}
+    {#                              FILMOGRAPHIE                                  #}
+    {# ========================================================================== #}
 
-</section>
+    {% if person.combined_credits.cast is defined
+        and person.combined_credits.cast|length > 0
+    %}
+
+        <section class="container py-5">
+
+            <h2 class="h3 fw-bold text-white d-flex align-items-center gap-3 mb-4">
+                <span class="section-title-accent"></span>
+                Filmographie
+            </h2>
+
+            <div class="d-flex gap-3 overflow-auto pt-3 pb-3 media-row">
+
+                {% for media in person.combined_credits.cast|slice(0, 15) %}
+
+                    {% set mediaTitle = media.title ?? media.name ?? 'Sans titre' %}
+                    {% set mediaImage = media.poster_path ?? null %}
+                    {% set mediaDate = media.release_date ?? media.first_air_date ?? null %}
+                    {% set mediaPath = null %}
+                    {% set mediaType = null %}
+
+                    {% if media.media_type == 'movie' %}
+
+                        {% set mediaPath = path('app_movie_details', {
+                            id: media.id
+                        }) %}
+
+                        {% set mediaType = 'Film' %}
+
+                    {% elseif media.media_type == 'tv' %}
+
+                        {% set mediaPath = path('app_tv_details', {
+                            id: media.id
+                        }) %}
+
+                        {% set mediaType = 'Série' %}
+
+                    {% endif %}
+
+                    {% if mediaPath %}
+
+                        <a
+                            href="{{ mediaPath }}"
+                            class="text-decoration-none flex-shrink-0"
+                            data-turbo-prefetch="false"
+                        >
+
+                            <article class="media-card">
+
+                                <div class="media-card-image-wrapper rounded-4 overflow-hidden shadow">
+
+                                    {% if mediaImage %}
+
+                                        <img
+                                            src="https://image.tmdb.org/t/p/w500{{ mediaImage }}"
+                                            class="media-card-image"
+                                            alt="{{ mediaTitle }}"
+                                        >
+
+                                    {% else %}
+
+                                        <div class="media-card-image d-flex align-items-center justify-content-center bg-secondary text-white-50 text-center p-3">
+                                            Image indisponible
+                                        </div>
+
+                                    {% endif %}
+
+                                    <div class="media-card-overlay"></div>
+
+                                </div>
+
+                                <div class="pt-3 px-1">
+
+                                    <h3 class="h6 fw-bold text-white text-truncate mb-1">
+                                        {{ mediaTitle }}
+                                    </h3>
+
+                                    <p class="small text-white-50 mb-0">
+
+                                        {% if mediaDate %}
+                                            {{ mediaDate|date('Y') }}
+                                        {% else %}
+                                            {{ mediaType }}
+                                        {% endif %}
+
+                                    </p>
+
+                                </div>
+
+                            </article>
+
+                        </a>
+
+                    {% endif %}
+
+                {% endfor %}
+
+            </div>
+
+        </section>
+
+    {% endif %}
 
 {% endblock %}
