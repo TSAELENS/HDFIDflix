@@ -1,35 +1,33 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-    Recherche - HDFIDflix
+	Recherche - HDFIDflix
 {% endblock %}
 
 {% block body %}
 
-    <div class="container py-5 search-page">
+	<div class="container py-5 search-page">
 
-        {# ================================================================== #}
-        {#                         BARRE DE RECHERCHE                         #}
-        {# ================================================================== #}
+		{# ================================================================== #}
+		{#                         BARRE DE RECHERCHE                         #}
+		{# ================================================================== #}
 
-        <section class="pt-3 pb-5">
+			<section class="pt-3 pb-5"> <p class="text-hdfid-green text-uppercase fw-bold small mb-2">
+				Explorer le catalogue
+			</p>
 
-            <p class="text-hdfid-green text-uppercase fw-bold small mb-2">
-                Explorer le catalogue
-            </p>
+			<h1 class="display-6 fw-bold text-white mb-4">
+				Rechercher
+			</h1>
 
-            <h1 class="display-6 fw-bold text-white mb-4">
-                Rechercher
-            </h1>
+			<div class="hero-search">
 
-            <div class="hero-search">
-
-                {{ form_start(form, {
+				{{ form_start(form, {
                     action: path('app_search'),
                     method: 'GET'
                 }) }}
 
-                    {{ form_widget(form.query, {
+				{{ form_widget(form.query, {
                         attr: {
                             class: 'form-control hero-search-input shadow-none',
                             placeholder: 'Rechercher un film, une série, une personne...',
@@ -37,290 +35,224 @@
                         }
                     }) }}
 
-                    <button
-                        type="submit"
-                        class="btn btn-hdfid rounded-4 shadow-sm hero-search-button d-flex align-items-center justify-content-center"
-                        aria-label="Rechercher"
-                    >
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="20"
-                            height="20"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                            stroke-width="2"
-                            aria-hidden="true"
-                        >
-                            <circle cx="11" cy="11" r="7"></circle>
-                            <path d="m20 20-4-4"></path>
-                        </svg>
-                    </button>
+				<button type="submit" class="btn btn-hdfid rounded-4 shadow-sm hero-search-button d-flex align-items-center justify-content-center" aria-label="Rechercher">
+					<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewbox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+						<circle cx="11" cy="11" r="7"></circle>
+						<path d="m20 20-4-4"></path>
+					</svg>
+				</button>
 
-                {{ form_end(form) }}
+				{{ form_end(form) }}
 
-            </div>
+			</div>
 
-        </section>
+		</section>
 
-        {% if query %}
+		{% if query %}
 
-            {% set totalResults =
+			{% set totalResults =
                 resultCounts.movie
                 + resultCounts.tv
                 + resultCounts.person
                 + resultCounts.other
             %}
 
-            {# ================================================================== #}
-            {#                        TITRE DES RÉSULTATS                         #}
-            {# ================================================================== #}
+			{# ================================================================== #}
+			{#                        TITRE DES RÉSULTATS                         #}
+			{# ================================================================== #}
 
-            <section class="pb-4">
+				<section class="pb-4"> <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-end gap-3 mb-4">
 
-                <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-end gap-3 mb-4">
-
-                    <div>
+					<div>
 
 
-                        <h2 class="h3 fw-bold text-white mb-0">
-                            Résultats pour
-                            <span class="text-hdfid-green">
-                                « {{ query }} »
-                            </span>
-                        </h2>
+						<h2 class="h3 fw-bold text-white mb-0">
+							Résultats pour
+							<span class="text-hdfid-green">
+								«
+								{{ query }}
+								»
+							</span>
+						</h2>
 
-                    </div>
+					</div>
 
-                    <p class="text-white-50 mb-0">
-                        {{ totalResults }}
-                        résultat{{ totalResults > 1 ? 's' : '' }}
-                    </p>
+					<p class="text-white-50 mb-0">
+						{{ totalResults }}
+						résultat{{ totalResults > 1 ? 's' : '' }}
+					</p>
 
-                </div>
+				</div>
 
-                {# ============================================================== #}
-                {#                            ONGLETS                             #}
-                {# ============================================================== #}
+				{# ============================================================== #}
+				{#                            ONGLETS                             #}
+				{# ============================================================== #}
 
-                <nav
-                    class="nav nav-pills flex-nowrap gap-2 overflow-auto pb-2 search-tabs"
-                    aria-label="Catégories des résultats"
-                >
+					<nav class="nav nav-pills flex-nowrap gap-2 overflow-auto pb-2 search-tabs" aria-label="Catégories des résultats"> <a href="{{ path('app_search', { query: query, type: 'movie' }) }}" class="nav-link search-tab rounded-4 d-flex align-items-center gap-3 px-4 py-3 {{ selectedType == 'movie' ? 'active' : '' }}" data-turbo-prefetch="false">
+						<span class="fw-semibold">
+							Films
+						</span>
 
-                    <a
-                        href="{{ path('app_search', {
-                            query: query,
-                            type: 'movie'
-                        }) }}"
-                        class="nav-link search-tab rounded-4 d-flex align-items-center gap-3 px-4 py-3 {{ selectedType == 'movie' ? 'active' : '' }}"
-                        data-turbo-prefetch="false"
-                    >
-                        <span class="fw-semibold">
-                            Films
-                        </span>
+						<span class="badge rounded-pill {{ selectedType == 'movie' ? 'text-bg-dark' : 'text-bg-secondary' }}">
+							{{ resultCounts.movie }}
+						</span>
+					</a>
 
-                        <span class="badge rounded-pill {{ selectedType == 'movie' ? 'text-bg-dark' : 'text-bg-secondary' }}">
-                            {{ resultCounts.movie }}
-                        </span>
-                    </a>
+					<a href="{{ path('app_search', { query: query, type: 'tv' }) }}" class="nav-link search-tab rounded-4 d-flex align-items-center gap-3 px-4 py-3 {{ selectedType == 'tv' ? 'active' : '' }}" data-turbo-prefetch="false">
+						<span class="fw-semibold">
+							Séries
+						</span>
 
-                    <a
-                        href="{{ path('app_search', {
-                            query: query,
-                            type: 'tv'
-                        }) }}"
-                        class="nav-link search-tab rounded-4 d-flex align-items-center gap-3 px-4 py-3 {{ selectedType == 'tv' ? 'active' : '' }}"
-                        data-turbo-prefetch="false"
-                    >
-                        <span class="fw-semibold">
-                            Séries
-                        </span>
+						<span class="badge rounded-pill {{ selectedType == 'tv' ? 'text-bg-dark' : 'text-bg-secondary' }}">
+							{{ resultCounts.tv }}
+						</span>
+					</a>
 
-                        <span class="badge rounded-pill {{ selectedType == 'tv' ? 'text-bg-dark' : 'text-bg-secondary' }}">
-                            {{ resultCounts.tv }}
-                        </span>
-                    </a>
+					<a href="{{ path('app_search', { query: query, type: 'person' }) }}" class="nav-link search-tab rounded-4 d-flex align-items-center gap-3 px-4 py-3 {{ selectedType == 'person' ? 'active' : '' }}" data-turbo-prefetch="false">
+						<span class="fw-semibold">
+							Personnes
+						</span>
 
-                    <a
-                        href="{{ path('app_search', {
-                            query: query,
-                            type: 'person'
-                        }) }}"
-                        class="nav-link search-tab rounded-4 d-flex align-items-center gap-3 px-4 py-3 {{ selectedType == 'person' ? 'active' : '' }}"
-                        data-turbo-prefetch="false"
-                    >
-                        <span class="fw-semibold">
-                            Personnes
-                        </span>
+						<span class="badge rounded-pill {{ selectedType == 'person' ? 'text-bg-dark' : 'text-bg-secondary' }}">
+							{{ resultCounts.person }}
+						</span>
+					</a>
 
-                        <span class="badge rounded-pill {{ selectedType == 'person' ? 'text-bg-dark' : 'text-bg-secondary' }}">
-                            {{ resultCounts.person }}
-                        </span>
-                    </a>
+					<a href="{{ path('app_search', { query: query, type: 'other' }) }}" class="nav-link search-tab rounded-4 d-flex align-items-center gap-3 px-4 py-3 {{ selectedType == 'other' ? 'active' : '' }}" data-turbo-prefetch="false">
+						<span class="fw-semibold">
+							Autres
+						</span>
 
-                    <a
-                        href="{{ path('app_search', {
-                            query: query,
-                            type: 'other'
-                        }) }}"
-                        class="nav-link search-tab rounded-4 d-flex align-items-center gap-3 px-4 py-3 {{ selectedType == 'other' ? 'active' : '' }}"
-                        data-turbo-prefetch="false"
-                    >
-                        <span class="fw-semibold">
-                            Autres
-                        </span>
+						<span class="badge rounded-pill {{ selectedType == 'other' ? 'text-bg-dark' : 'text-bg-secondary' }}">
+							{{ resultCounts.other }}
+						</span>
+					</a>
 
-                        <span class="badge rounded-pill {{ selectedType == 'other' ? 'text-bg-dark' : 'text-bg-secondary' }}">
-                            {{ resultCounts.other }}
-                        </span>
-                    </a>
+				</nav>
 
-                </nav>
+			</section>
 
-            </section>
+			{# ================================================================== #}
+			{#                         CARTES DES RÉSULTATS                        #}
+			{# ================================================================== #}
 
-            {# ================================================================== #}
-            {#                         CARTES DES RÉSULTATS                        #}
-            {# ================================================================== #}
+				<section class="pb-5 search-results"> {% if results is empty %}
 
-            <section class="pb-5 search-results">
+					<div class="rounded-4 border border-secondary border-opacity-25 text-center px-4 py-5">
 
-                {% if results is empty %}
+						<svg xmlns="http://www.w3.org/2000/svg" width="42" height="42" fill="none" viewbox="0 0 24 24" stroke="currentColor" stroke-width="1.5" class="text-white-50 mb-3" aria-hidden="true">
+							<circle cx="11" cy="11" r="7"></circle>
+							<path d="m20 20-4-4"></path>
+						</svg>
 
-                    <div class="rounded-4 border border-secondary border-opacity-25 text-center px-4 py-5">
+						<h3 class="h5 fw-bold text-white">
+							Aucun résultat dans cette catégorie
+						</h3>
 
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="42"
-                            height="42"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                            stroke-width="1.5"
-                            class="text-white-50 mb-3"
-                            aria-hidden="true"
-                        >
-                            <circle cx="11" cy="11" r="7"></circle>
-                            <path d="m20 20-4-4"></path>
-                        </svg>
+						<p class="text-white-50 mb-0">
+							Essayez une autre catégorie ou une nouvelle recherche.
+						</p>
 
-                        <h3 class="h5 fw-bold text-white">
-                            Aucun résultat dans cette catégorie
-                        </h3>
+					</div>
 
-                        <p class="text-white-50 mb-0">
-                            Essayez une autre catégorie ou une nouvelle recherche.
-                        </p>
+				{% else %}
 
-                    </div>
+					<div class="row g-4">
 
-                {% else %}
+						{% for result in results %}
 
-                    <div class="row g-4">
+							{% set title = result.title ?? result.name ?? 'Sans titre' %}
+							{% set image = result.poster_path ?? result.profile_path ?? null %}
+							{% set date = result.release_date ?? result.first_air_date ?? null %}
+							{% set detailsPath = null %}
+							{% set typeLabel = 'Autre' %}
 
-                        {% for result in results %}
+							{% if selectedType == 'movie' %}
 
-                            {% set title = result.title ?? result.name ?? 'Sans titre' %}
-                            {% set image = result.poster_path ?? result.profile_path ?? null %}
-                            {% set date = result.release_date ?? result.first_air_date ?? null %}
-                            {% set detailsPath = null %}
-                            {% set typeLabel = 'Autre' %}
-
-                            {% if selectedType == 'movie' %}
-
-                                {% set detailsPath = path('app_movie_details', {
+								{% set detailsPath = path('app_movie_details', {
                                     id: result.id
                                 }) %}
 
-                                {% set typeLabel = 'Film' %}
+								{% set typeLabel = 'Film' %}
 
-                            {% elseif selectedType == 'tv' %}
+							{% elseif selectedType == 'tv' %}
 
-                                {% set detailsPath = path('app_tv_details', {
+								{% set detailsPath = path('app_tv_details', {
                                     id: result.id
                                 }) %}
 
-                                {% set typeLabel = 'Série' %}
+								{% set typeLabel = 'Série' %}
 
-                            {% elseif selectedType == 'person' %}
+							{% elseif selectedType == 'person' %}
 
-                                {% set detailsPath = path('app_person_details', {
+								{% set detailsPath = path('app_person_details', {
                                     id: result.id
                                 }) %}
 
-                                {% set typeLabel = 'Personne' %}
+								{% set typeLabel = 'Personne' %}
 
-                            {% endif %}
+							{% endif %}
 
-                            <div class="col-6 col-md-4 col-lg-3 col-xl-2">
+							<div class="col-6 col-md-4 col-lg-3 col-xl-2">
 
-                                {% if detailsPath %}
-                                    <a
-                                        href="{{ detailsPath }}"
-                                        class="text-decoration-none d-block h-100"
-                                        data-turbo-prefetch="false"
-                                    >
-                                {% endif %}
+								{% if detailsPath %}
+									<a href="{{ detailsPath }}" class="text-decoration-none d-block h-100" data-turbo-prefetch="false">
+									{% endif %}
 
-                                    <article class="media-card h-100">
+									<article class="media-card h-100">
 
-                                        <div class="media-card-image-wrapper rounded-4 overflow-hidden shadow">
+										<div class="media-card-image-wrapper rounded-4 overflow-hidden shadow">
 
-                                            {% if image %}
+											{% if image %}
 
-                                                <img
-                                                    src="https://image.tmdb.org/t/p/w500{{ image }}"
-                                                    class="media-card-image"
-                                                    alt="{{ title }}"
-                                                >
+												<img src="https://image.tmdb.org/t/p/w500{{ image }}" class="media-card-image" alt="{{ title }}">
 
-                                            {% else %}
+											{% else %}
 
-                                                <div class="media-card-image d-flex align-items-center justify-content-center bg-secondary text-white-50 text-center p-3">
-                                                    Image indisponible
-                                                </div>
+												<div class="media-card-image d-flex align-items-center justify-content-center bg-secondary text-white-50 text-center p-3">
+													Image indisponible
+												</div>
 
-                                            {% endif %}
+											{% endif %}
 
-                                            <div class="media-card-overlay"></div>
+											<div class="media-card-overlay"></div>
 
-                                        </div>
+										</div>
 
-                                        <div class="pt-3 px-1">
+										<div class="pt-3 px-1">
 
-                                            <h3 class="h6 fw-bold text-white text-truncate mb-1">
-                                                {{ title }}
-                                            </h3>
+											<h3 class="h6 fw-bold text-white text-truncate mb-1">
+												{{ title }}
+											</h3>
 
-                                            <p class="small text-white-50 mb-0">
-                                                {% if date %}
-                                                    {{ date|date('Y') }}
-                                                {% else %}
-                                                    {{ typeLabel }}
-                                                {% endif %}
-                                            </p>
+											<p class="small text-white-50 mb-0">
+												{% if date %}
+													{{ date|date('Y') }}
+												{% else %}
+													{{ typeLabel }}
+												{% endif %}
+											</p>
 
-                                        </div>
+										</div>
 
-                                    </article>
+									</article>
 
-                                {% if detailsPath %}
-                                    </a>
-                                {% endif %}
+									{% if detailsPath %}
+									</a>
+								{% endif %}
 
-                            </div>
+							</div>
 
-                        {% endfor %}
+						{% endfor %}
 
-                    </div>
+					</div>
 
-                {% endif %}
+				{% endif %}
 
-            </section>
+			</section>
 
-        {% endif %}
+		{% endif %}
 
-    </div>
+	</div>
 
 {% endblock %}

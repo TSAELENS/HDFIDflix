@@ -9,9 +9,9 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 final class SearchSubscriber implements EventSubscriberInterface
 {
 
-/**
- * Journalise les recherches effectuées.
- */
+    /**
+     * Journalise les recherches effectuées.
+     */
 
     public function __construct(
         private readonly LoggerInterface $logger,

@@ -43,7 +43,7 @@ final class DetailController extends AbstractController
     {
         $media = $tmdbService->getTvDetails($id);
 
-        $eventDispatcher->dispatch(new ViewedEvent($id, $media['name']?? 'Sans titre', 'tv'));
+        $eventDispatcher->dispatch(new ViewedEvent($id, $media['name'] ?? 'Sans titre', 'tv'));
 
         return $this->render('detail/index.html.twig', [
             'media' => $media,
@@ -56,10 +56,10 @@ final class DetailController extends AbstractController
     /* ====================================================================== */
 
     #[Route('/person/{id}', name: 'app_person_details', requirements: ['id' => '\d+'])]
-    public function person(int $id,TmdbService $tmdbService, EventDispatcherInterface $eventDispatcher): Response
+    public function person(int $id, TmdbService $tmdbService, EventDispatcherInterface $eventDispatcher): Response
     {
         $person = $tmdbService->getPersonDetails($id);
-        $eventDispatcher->dispatch(new ViewedEvent($id,  $person['name'] ?? 'Sans nom', 'person'));
+        $eventDispatcher->dispatch(new ViewedEvent($id, $person['name'] ?? 'Sans nom', 'person'));
 
         return $this->render('detail/person.html.twig', [
             'person' => $person,

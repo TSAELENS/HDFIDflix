@@ -76,7 +76,7 @@ final class TmdbService
         return $response->toArray();
     }
 
-        public function getPersonDetails(int $id): array
+    public function getPersonDetails(int $id): array
     {
         $response = $this->httpClient->request(
             'GET',

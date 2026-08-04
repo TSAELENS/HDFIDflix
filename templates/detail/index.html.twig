@@ -253,211 +253,175 @@
 		{% endif %}
 
 
-{# ========================================================================== #}
-{#                         PLATEFORMES DISPONIBLES                            #}
-{# ========================================================================== #}
+		{# ========================================================================== #}
+		{#                         PLATEFORMES DISPONIBLES                            #}
+		{# ========================================================================== #}
 
-{% set watchProviders = media['watch/providers'].results.FR ?? null %}
+		{% set watchProviders = media['watch/providers'].results.FR ?? null %}
 
-{% if watchProviders %}
+			{% if watchProviders %}
 
-    <section class="mb-5">
+				<section class="mb-5"> <h2 class="h3 fw-bold text-white d-flex align-items-center gap-3 mb-4">
+					<span class="section-title-accent"></span>
+					Où regarder
+				</h2>
 
-        <h2 class="h3 fw-bold text-white d-flex align-items-center gap-3 mb-4">
-            <span class="section-title-accent"></span>
-            Où regarder
-        </h2>
+				{% set providers = watchProviders %}
 
-        {% set providers = watchProviders %}
+				{# Streaming #}
+				{% if providers.flatrate is defined and providers.flatrate|length > 0 %}
 
-        {# Streaming #}
-        {% if providers.flatrate is defined and providers.flatrate|length > 0 %}
+					<h3 class="h5 fw-semibold text-white-50 mb-3">
+						Disponible en streaming
+					</h3>
 
-            <h3 class="h5 fw-semibold text-white-50 mb-3">
-                Disponible en streaming
-            </h3>
+					<div class="d-flex flex-wrap gap-3 mb-4">
 
-            <div class="d-flex flex-wrap gap-3 mb-4">
+						{% set displayedStreaming = [] %}
 
-                {% set displayedStreaming = [] %}
+						{% for provider in providers.flatrate %}
 
-                {% for provider in providers.flatrate %}
+							{% if provider.provider_id not in displayedStreaming %}
 
-                    {% if provider.provider_id not in displayedStreaming %}
-
-                        {% set displayedStreaming = displayedStreaming|merge([
+								{% set displayedStreaming = displayedStreaming|merge([
                             provider.provider_id
                         ]) %}
 
-                        <a
-                            href="{{ watchProviders.link ?? '#' }}"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            class="provider-logo-link d-inline-flex rounded-3"
-                            title="{{ provider.provider_name }}"
-                        >
-                            <img
-                                src="https://image.tmdb.org/t/p/w92{{ provider.logo_path }}"
-                                width="55"
-                                height="55"
-                                class="rounded-3 shadow-sm"
-                                alt="{{ provider.provider_name }}"
-                            >
-                        </a>
+								<a href="{{ watchProviders.link ?? '#' }}" target="_blank" rel="noopener noreferrer" class="provider-logo-link d-inline-flex rounded-3" title="{{ provider.provider_name }}">
+									<img src="https://image.tmdb.org/t/p/w92{{ provider.logo_path }}" width="55" height="55" class="rounded-3 shadow-sm" alt="{{ provider.provider_name }}">
+								</a>
 
-                    {% endif %}
+							{% endif %}
 
-                {% endfor %}
+						{% endfor %}
 
-            </div>
+					</div>
 
-        {% endif %}
+				{% endif %}
 
-        {# Fusion de la location et de l’achat #}
-        {% set purchaseProviders = [] %}
+				{# Fusion de la location et de l’achat #}
+				{% set purchaseProviders = [] %}
 
-        {% for provider in providers.rent ?? [] %}
-            {% set purchaseProviders = purchaseProviders|merge([provider]) %}
-        {% endfor %}
+				{% for provider in providers.rent ?? [] %}
+					{% set purchaseProviders = purchaseProviders|merge([provider]) %}
+				{% endfor %}
 
-        {% for provider in providers.buy ?? [] %}
-            {% set purchaseProviders = purchaseProviders|merge([provider]) %}
-        {% endfor %}
+				{% for provider in providers.buy ?? [] %}
+					{% set purchaseProviders = purchaseProviders|merge([provider]) %}
+				{% endfor %}
 
-        {% if purchaseProviders|length > 0 %}
+				{% if purchaseProviders|length > 0 %}
 
-            <h3 class="h5 fw-semibold text-white-50 mb-3">
-                Location / Achat
-            </h3>
+					<h3 class="h5 fw-semibold text-white-50 mb-3">
+						Location / Achat
+					</h3>
 
-            <div class="d-flex flex-wrap gap-3">
+					<div class="d-flex flex-wrap gap-3">
 
-                {% set displayedPurchase = [] %}
+						{% set displayedPurchase = [] %}
 
-                {% for provider in purchaseProviders %}
+						{% for provider in purchaseProviders %}
 
-                    {% if provider.provider_id not in displayedPurchase %}
+							{% if provider.provider_id not in displayedPurchase %}
 
-                        {% set displayedPurchase = displayedPurchase|merge([
+								{% set displayedPurchase = displayedPurchase|merge([
                             provider.provider_id
                         ]) %}
 
-                        <a
-                            href="{{ watchProviders.link ?? '#' }}"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            class="provider-logo-link d-inline-flex rounded-3"
-                            title="{{ provider.provider_name }}"
-                        >
-                            <img
-                                src="https://image.tmdb.org/t/p/w92{{ provider.logo_path }}"
-                                width="55"
-                                height="55"
-                                class="rounded-3 shadow-sm"
-                                alt="{{ provider.provider_name }}"
-                            >
-                        </a>
+								<a href="{{ watchProviders.link ?? '#' }}" target="_blank" rel="noopener noreferrer" class="provider-logo-link d-inline-flex rounded-3" title="{{ provider.provider_name }}">
+									<img src="https://image.tmdb.org/t/p/w92{{ provider.logo_path }}" width="55" height="55" class="rounded-3 shadow-sm" alt="{{ provider.provider_name }}">
+								</a>
 
-                    {% endif %}
+							{% endif %}
 
-                {% endfor %}
+						{% endfor %}
 
-            </div>
+					</div>
 
-        {% endif %}
+				{% endif %}
 
-        <p class="small text-white-50 mt-3 mb-0">
-            Données de disponibilité fournies par JustWatch.
-        </p>
+				<p class="small text-white-50 mt-3 mb-0">
+					Données de disponibilité fournies par JustWatch.
+				</p>
 
-    </section>
+			</section>
 
-{% endif %}
+		{% endif %}
 
-{# ========================================================================== #}
-{#                            CONTENUS SIMILAIRES                             #}
-{# ========================================================================== #}
+		{# ========================================================================== #}
+		{#                            CONTENUS SIMILAIRES                             #}
+		{# ========================================================================== #}
 
-{% if media.similar.results is defined and media.similar.results|length > 0 %}
+			{% if media.similar.results is defined and media.similar.results|length > 0 %}
 
-    <section class="mb-5">
+				<section class="mb-5"> <h2 class="h3 fw-bold text-white d-flex align-items-center gap-3 mb-4">
+					<span class="section-title-accent"></span>
+					Vous pourriez aimer
+				</h2>
 
-        <h2 class="h3 fw-bold text-white d-flex align-items-center gap-3 mb-4">
-            <span class="section-title-accent"></span>
-            Vous pourriez aimer
-        </h2>
+				<div class="d-flex gap-3 overflow-auto pt-3 pb-3 media-row">
 
-        <div class="d-flex gap-3 overflow-auto pt-3 pb-3 media-row">
+					{% for similar in media.similar.results|slice(0, 15) %}
 
-            {% for similar in media.similar.results|slice(0, 15) %}
+						{% set similarTitle = similar.title ?? similar.name ?? 'Sans titre' %}
+						{% set similarImage = similar.poster_path ?? null %}
+						{% set similarDate = similar.release_date ?? similar.first_air_date ?? null %}
 
-                {% set similarTitle = similar.title ?? similar.name ?? 'Sans titre' %}
-                {% set similarImage = similar.poster_path ?? null %}
-                {% set similarDate = similar.release_date ?? similar.first_air_date ?? null %}
-
-                {% if type == 'movie' %}
-                    {% set similarPath = path('app_movie_details', {
+						{% if type == 'movie' %}
+							{% set similarPath = path('app_movie_details', {
                         id: similar.id
                     }) %}
-                {% else %}
-                    {% set similarPath = path('app_tv_details', {
+						{% else %}
+							{% set similarPath = path('app_tv_details', {
                         id: similar.id
                     }) %}
-                {% endif %}
+						{% endif %}
 
-                <a
-                    href="{{ similarPath }}"
-                    class="text-decoration-none flex-shrink-0"
-                    data-turbo-prefetch="false"
-                >
-                    <article class="media-card">
+						<a href="{{ similarPath }}" class="text-decoration-none flex-shrink-0" data-turbo-prefetch="false">
+							<article class="media-card">
 
-                        <div class="media-card-image-wrapper rounded-4 overflow-hidden shadow">
+								<div class="media-card-image-wrapper rounded-4 overflow-hidden shadow">
 
-                            {% if similarImage %}
+									{% if similarImage %}
 
-                                <img
-                                    src="https://image.tmdb.org/t/p/w500{{ similarImage }}"
-                                    class="media-card-image"
-                                    alt="{{ similarTitle }}"
-                                >
+										<img src="https://image.tmdb.org/t/p/w500{{ similarImage }}" class="media-card-image" alt="{{ similarTitle }}">
 
-                            {% else %}
+									{% else %}
 
-                                <div class="media-card-image d-flex align-items-center justify-content-center bg-secondary text-white-50 text-center p-3">
-                                    Image indisponible
-                                </div>
+										<div class="media-card-image d-flex align-items-center justify-content-center bg-secondary text-white-50 text-center p-3">
+											Image indisponible
+										</div>
 
-                            {% endif %}
+									{% endif %}
 
-                            <div class="media-card-overlay"></div>
+									<div class="media-card-overlay"></div>
 
-                        </div>
+								</div>
 
-                        <div class="pt-3 px-1">
+								<div class="pt-3 px-1">
 
-                            <h3 class="h6 fw-bold text-white text-truncate mb-1">
-                                {{ similarTitle }}
-                            </h3>
+									<h3 class="h6 fw-bold text-white text-truncate mb-1">
+										{{ similarTitle }}
+									</h3>
 
-                            {% if similarDate %}
-                                <p class="small text-white-50 mb-0">
-                                    {{ similarDate|date('Y') }}
-                                </p>
-                            {% endif %}
+									{% if similarDate %}
+										<p class="small text-white-50 mb-0">
+											{{ similarDate|date('Y') }}
+										</p>
+									{% endif %}
 
-                        </div>
+								</div>
 
-                    </article>
-                </a>
+							</article>
+						</a>
 
-            {% endfor %}
+					{% endfor %}
 
-        </div>
+				</div>
 
-    </section>
+			</section>
 
-{% endif %}
+		{% endif %}
 
 
 	</div>

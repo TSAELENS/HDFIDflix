@@ -33,11 +33,7 @@ body {
     right: 0;
     left: 0;
 
-    background: linear-gradient(
-        to bottom,
-        rgba(8, 8, 20, 0.85),
-        transparent
-    );
+    background: linear-gradient(to bottom, rgba(8, 8, 20, 0.85), transparent);
 }
 
 .cinema-brand {
@@ -185,7 +181,6 @@ body {
     padding: 0;
 }
 
-
 /* ========================================================================== */
 /*                              BOUTONS HDFID                                  */
 /* ========================================================================== */
@@ -205,8 +200,6 @@ body {
 
     --bs-btn-focus-shadow-rgb: 149, 193, 31;
 
-    
-    
     font-weight: 700;
 }
 
@@ -214,15 +207,12 @@ body {
 /*                              PAGE D’ACCUEIL                                */
 /* ========================================================================== */
 
-
 .section-title-accent {
     width: 5px;
     height: 30px;
     background-color: var(--hdfid-green);
     border-radius: 999px;
 }
-
-
 
 /* ========================================================================== */
 /*                            CARTES DES MÉDIAS                               */
@@ -427,12 +417,11 @@ body {
     }
 
     .detail-hero-overlay {
-        background:
-            linear-gradient(
-                to bottom,
-                rgba(8, 8, 24, 0.45) 0%,
-                var(--page-background) 100%
-            );
+        background: linear-gradient(
+            to bottom,
+            rgba(8, 8, 24, 0.45) 0%,
+            var(--page-background) 100%
+        );
     }
 }
 

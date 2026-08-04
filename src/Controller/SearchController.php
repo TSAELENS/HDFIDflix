@@ -40,9 +40,9 @@ final class SearchController extends AbstractController
             return $this->redirectToRoute('app_home');
         }
 
-        if ($query !== '') {                  
+        if ($query !== '') {
             $eventDispatcher->dispatch(
-                new SearchEvent($query) 
+                new SearchEvent($query)
             );
             $response = $tmdbService->search($query);
             $results = $response['results'] ?? [];
