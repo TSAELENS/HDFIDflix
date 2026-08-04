@@ -42,9 +42,12 @@ php bin/console importmap:install
 ```
 
 Créez un fichier `.env.local` à la racine du projet :
+```bash
+New-Item .env.local
+```
 
 ```env
-TMDB_API_KEY=votre_cle_api
+TMDB_API_TOKEN=votre_cle_api
 ```
 
 Puis lancez l’application :

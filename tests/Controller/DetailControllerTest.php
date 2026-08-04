@@ -9,7 +9,7 @@ final class DetailControllerTest extends WebTestCase
     public function testIndex(): void
     {
         $client = static::createClient();
-        $client->request('GET', '/detail');
+        $client->request('GET', '/movie/238');
 
         self::assertResponseIsSuccessful();
     }
