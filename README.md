@@ -72,15 +72,10 @@ php bin/console lint:container
 
 ## Tests
 
-Pour les lancer, créez un fichier `.env.test.local` contenant le token TMDB :
+Les tests utilisent des réponses TMDB simulées et ne nécessitent ni token réel ni connexion à l’API.
+Ils couvrent les contrôleurs, le listener et le subscriber.
 
-```powershell
-New-Item .env.test.local
-```
-```env
-TMDB_API_TOKEN=votre_token_api
-```
-Exécutez ensuite :
+Pour lancer les tests :
 
 ```bash
 php bin/phpunit
