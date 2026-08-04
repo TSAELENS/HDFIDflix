@@ -42,7 +42,7 @@ php bin/console importmap:install
 ```
 
 Créez un fichier `.env.local` à la racine du projet :
-```bash
+```powershell
 New-Item .env.local
 ```
 
@@ -68,6 +68,22 @@ Le projet utilise :
 ```bash
 php bin/console lint:twig templates
 php bin/console lint:container
+```
+
+## Tests
+
+Pour les lancer, créez un fichier `.env.test.local` contenant le token TMDB :
+
+```powershell
+New-Item .env.test.local
+```
+```env
+TMDB_API_TOKEN=votre_token_api
+```
+Exécutez ensuite :
+
+```bash
+php bin/phpunit
 ```
 
 ## Auteur
