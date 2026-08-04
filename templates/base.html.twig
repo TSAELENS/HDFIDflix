@@ -20,54 +20,33 @@
 
 	{% set isHome = app.request.attributes.get('_route') == 'app_home' %}
 
-	<body class="bg-dark text-light {{ isHome ? 'home-page' : '' }}">
+	<body class="text-light min-vh-100 d-flex flex-column {{ isHome ? 'home-page' : '' }}">
 
-    {# ====================================================================== #}
-    {#                              NAVBAR                                #}
-    {# ====================================================================== #}
+		{# ====================================================================== #}
+		{#                              NAVBAR                                #}
+		{# ====================================================================== #}
 
-		<nav class="navbar navbar-expand-lg navbar-dark cinema-navbar py-3">
-			<div class="container">
+			<nav class="navbar navbar-expand-lg navbar-dark cinema-navbar py-3"> <div class="container">
 
-				<a
-					class="navbar-brand cinema-brand"
-					href="{{ path('app_home') }}"
-				>
+				<a class="navbar-brand cinema-brand fs-4" href="{{ path('app_home') }}">
 					HDFID<span>flix</span>
 				</a>
 
-				<button
-					class="navbar-toggler border-0 shadow-none"
-					type="button"
-					data-bs-toggle="collapse"
-					data-bs-target="#mainNavigation"
-					aria-controls="mainNavigation"
-					aria-expanded="false"
-					aria-label="Ouvrir le menu"
-				>
+				<button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavigation" aria-controls="mainNavigation" aria-expanded="false" aria-label="Ouvrir le menu">
 					<span class="navbar-toggler-icon"></span>
 				</button>
 
-				<div
-					class="collapse navbar-collapse"
-					id="mainNavigation"
-				>
+				<div class="collapse navbar-collapse" id="mainNavigation">
 					<ul class="navbar-nav ms-auto align-items-lg-center gap-lg-4">
 
 						<li class="nav-item">
-							<a
-								class="nav-link {{ isHome ? 'active' : '' }}"
-								href="{{ path('app_home') }}"
-							>
+							<a class="nav-link {{ isHome ? 'active' : '' }}" href="{{ path('app_home') }}">
 								Accueil
 							</a>
 						</li>
 
 						<li class="nav-item">
-							<a
-								class="nav-link {{ app.request.attributes.get('_route') == 'app_search' ? 'active' : '' }}"
-								href="{{ path('app_search') }}"
-							>
+							<a class="nav-link {{ app.request.attributes.get('_route') == 'app_search' ? 'active' : '' }}" href="{{ path('app_search') }}">
 								Rechercher
 							</a>
 						</li>
@@ -78,10 +57,31 @@
 			</div>
 		</nav>
 
-		<main>
-			{% block body %}
+		<main class="flex-grow-1"> {% block body %}{% endblock %}
+			</main>
 
-			{% endblock %}
-		</main>
-	</body>
-</html>
+			{# ========================================================================== #}
+			{#                                  FOOTER                                    #}
+			{# ========================================================================== #}
+
+				<footer class="border-top border-secondary border-opacity-25 mt-5 py-4"> <div class="container d-flex flex-column flex-md-row align-items-center justify-content-between gap-3">
+
+					<a href="{{ path('app_home') }}" class="cinema-brand fs-5 text-decoration-none">
+						HDFID<span>flix</span>
+					</a>
+
+					<p class="small text-white-50 text-center mb-0">
+						Projet réalisé avec l’API TMDB
+					</p>
+
+					<p class="small text-white-50 mb-0">
+						©
+						{{ "now"|date("Y") }}
+						• SAELENS Théo
+					</p>
+
+				</div>
+
+			</footer>
+		</body>
+	</html>
