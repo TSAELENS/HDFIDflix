@@ -30,8 +30,7 @@
 				{{ form_widget(form.query, {
                         attr: {
                             class: 'form-control hero-search-input shadow-none',
-                            placeholder: 'Rechercher un film, une série, une personne...',
-                            value: query
+                            placeholder: 'Rechercher un film, une série, une personne...'
                         }
                     }) }}
 
@@ -44,6 +43,10 @@
 
 				{{ form_end(form) }}
 
+				<div class="small text-danger mt-2">
+					{{ form_errors(form.query) }}
+				</div>
+				
 			</div>
 
 		</section>

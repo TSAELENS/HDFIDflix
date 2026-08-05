@@ -40,7 +40,7 @@
 					{% else %}
 						<p class="lead hero-description mb-4">
 							Découvrez les films, séries et personnalités
-																																																															                            qui font l’actualité.
+																																																																																				                            qui font l’actualité.
 						</p>
 					{% endif %}
 
@@ -97,35 +97,10 @@
 
 						{% for movie in popularMovies|slice(0, 15) %}
 
-							<a href="{{ path('app_movie_details', { id: movie.id }) }}" class="text-decoration-none flex-shrink-0" data-turbo-prefetch="false">
-								<article class="media-card">
-
-									<div class="media-card-image-wrapper rounded-4 overflow-hidden shadow">
-										{% if movie.poster_path %}
-											<img src="https://image.tmdb.org/t/p/w500{{ movie.poster_path }}" class="media-card-image" alt="{{ movie.title }}">
-										{% else %}
-											<div class="media-card-image d-flex align-items-center justify-content-center bg-secondary text-white text-center p-3">
-												Image indisponible
-											</div>
-										{% endif %}
-
-										<div class="media-card-overlay"></div>
-									</div>
-
-									<div class="pt-3 px-1">
-										<h3 class="h6 fw-bold text-white text-truncate mb-1">
-											{{ movie.title }}
-										</h3>
-
-										{% if movie.release_date %}
-											<p class="small text-white-50 mb-0">
-												{{ movie.release_date|date('Y') }}
-											</p>
-										{% endif %}
-									</div>
-
-								</article>
-							</a>
+							{{ include('components/mediacard.html.twig', {
+								media: movie,
+								type: 'movie'
+							}) }}
 
 						{% endfor %}
 
@@ -147,35 +122,12 @@
 					<div class="d-flex gap-3 overflow-auto pt-3 pb-3 media-row">
 
 						{% for tv in popularTv|slice(0, 15) %}
-							<a href="{{ path('app_tv_details', { id: tv.id }) }}" class="text-decoration-none flex-shrink-0" data-turbo-prefetch="false">
-								<article class="media-card">
 
-									<div class="media-card-image-wrapper rounded-4 overflow-hidden shadow">
-										{% if tv.poster_path %}
-											<img src="https://image.tmdb.org/t/p/w500{{ tv.poster_path }}" class="media-card-image" alt="{{ tv.name }}">
-										{% else %}
-											<div class="media-card-image d-flex align-items-center justify-content-center bg-secondary text-white text-center p-3">
-												Image indisponible
-											</div>
-										{% endif %}
+							{{ include('components/mediacard.html.twig', {
+								media: tv,
+								type: 'tv'
+							}) }}
 
-										<div class="media-card-overlay"></div>
-									</div>
-
-									<div class="pt-3 px-1">
-										<h3 class="h6 fw-bold text-white text-truncate mb-1">
-											{{ tv.name }}
-										</h3>
-
-										{% if tv.first_air_date %}
-											<p class="small text-white-50 mb-0">
-												{{ tv.first_air_date|date('Y') }}
-											</p>
-										{% endif %}
-									</div>
-
-								</article>
-							</a>
 						{% endfor %}
 
 					</div>
@@ -195,37 +147,14 @@
 
 					<div class="d-flex gap-3 overflow-auto pt-3 pb-3 media-row">
 
-						{% for movie in topRatedMovies|slice(0, 15) %}
-							<a href="{{ path('app_movie_details', { id: movie.id }) }}" class="text-decoration-none flex-shrink-0" data-turbo-prefetch="false">
-								<article class="media-card">
+					{% for movie in topRatedMovies|slice(0, 15) %}
 
-									<div class="media-card-image-wrapper rounded-4 overflow-hidden shadow">
-										{% if movie.poster_path %}
-											<img src="https://image.tmdb.org/t/p/w500{{ movie.poster_path }}" class="media-card-image" alt="{{ movie.title }}">
-										{% else %}
-											<div class="media-card-image d-flex align-items-center justify-content-center bg-secondary text-white text-center p-3">
-												Image indisponible
-											</div>
-										{% endif %}
+						{{ include('components/mediacard.html.twig', {
+							media: movie,
+							type: 'movie'
+						}) }}
 
-										<div class="media-card-overlay"></div>
-									</div>
-
-									<div class="pt-3 px-1">
-										<h3 class="h6 fw-bold text-white text-truncate mb-1">
-											{{ movie.title }}
-										</h3>
-
-										{% if movie.release_date %}
-											<p class="small text-white-50 mb-0">
-												{{ movie.release_date|date('Y') }}
-											</p>
-										{% endif %}
-									</div>
-
-								</article>
-							</a>
-						{% endfor %}
+					{% endfor %}
 
 					</div>
 

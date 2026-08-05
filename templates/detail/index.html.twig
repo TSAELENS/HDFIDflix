@@ -363,57 +363,10 @@
 
 					{% for similar in media.similar.results|slice(0, 15) %}
 
-						{% set similarTitle = similar.title ?? similar.name ?? 'Sans titre' %}
-						{% set similarImage = similar.poster_path ?? null %}
-						{% set similarDate = similar.release_date ?? similar.first_air_date ?? null %}
-
-						{% if type == 'movie' %}
-							{% set similarPath = path('app_movie_details', {
-                        id: similar.id
-                    }) %}
-						{% else %}
-							{% set similarPath = path('app_tv_details', {
-                        id: similar.id
-                    }) %}
-						{% endif %}
-
-						<a href="{{ similarPath }}" class="text-decoration-none flex-shrink-0" data-turbo-prefetch="false">
-							<article class="media-card">
-
-								<div class="media-card-image-wrapper rounded-4 overflow-hidden shadow">
-
-									{% if similarImage %}
-
-										<img src="https://image.tmdb.org/t/p/w500{{ similarImage }}" class="media-card-image" alt="{{ similarTitle }}">
-
-									{% else %}
-
-										<div class="media-card-image d-flex align-items-center justify-content-center bg-secondary text-white-50 text-center p-3">
-											Image indisponible
-										</div>
-
-									{% endif %}
-
-									<div class="media-card-overlay"></div>
-
-								</div>
-
-								<div class="pt-3 px-1">
-
-									<h3 class="h6 fw-bold text-white text-truncate mb-1">
-										{{ similarTitle }}
-									</h3>
-
-									{% if similarDate %}
-										<p class="small text-white-50 mb-0">
-											{{ similarDate|date('Y') }}
-										</p>
-									{% endif %}
-
-								</div>
-
-							</article>
-						</a>
+						{{ include('components/mediacard.html.twig', {
+							media: similar,
+							type: type
+						}) }}
 
 					{% endfor %}
 

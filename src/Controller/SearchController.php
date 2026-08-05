@@ -18,15 +18,16 @@ final class SearchController extends AbstractController
      * les résultats selon leur type.
      */
 
-    #[Route('/search', name: 'app_search')]
+    #[Route('/search', name: 'app_search', methods: ['GET'])]
     public function index(
         Request $request,
         TmdbService $tmdbService,
         EventDispatcherInterface $eventDispatcher
     ): Response {
         $form = $this->createForm(GlobalSearchType::class);
+        $form->handleRequest($request);
 
-        $query = $request->query->getString('query');
+        $query = trim((string) $form->get('query')->getData());
         $selectedType = $request->query->getString('type', 'movie');
 
         $groupedResults = [
@@ -36,11 +37,18 @@ final class SearchController extends AbstractController
             'other' => [],
         ];
 
-        if (!$query) {
+        $resultCounts = [
+            'movie' => 0,
+            'tv' => 0,
+            'person' => 0,
+            'other' => 0,
+        ];
+
+        if (!$form->isSubmitted()) {
             return $this->redirectToRoute('app_home');
         }
 
-        if ($query !== '') {
+        if ($form->isValid()) {
             $eventDispatcher->dispatch(
                 new SearchEvent($query)
             );
@@ -69,7 +77,7 @@ final class SearchController extends AbstractController
         }
 
         return $this->render('search/index.html.twig', [
-            'form' => $form,
+            'form' => $form->createView(),
             'query' => $query,
             'selectedType' => $selectedType,
             'groupedResults' => $groupedResults,

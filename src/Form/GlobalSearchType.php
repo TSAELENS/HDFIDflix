@@ -44,6 +44,7 @@ class GlobalSearchType extends AbstractType
         $resolver->setDefaults([
             'method' => 'GET',
             'csrf_protection' => false,
+            'allow_extra_fields' => true,
         ]);
     }
 
@@ -51,5 +52,6 @@ class GlobalSearchType extends AbstractType
     {
         return '';
     }
+    
 
 }

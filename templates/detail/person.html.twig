@@ -157,81 +157,14 @@
 
 			<div class="d-flex gap-3 overflow-auto pt-3 pb-3 media-row">
 
-				{% for media in person.combined_credits.cast|slice(0, 15) %}
+			{% for media in person.combined_credits.cast|slice(0, 15) %}
 
-					{% set mediaTitle = media.title ?? media.name ?? 'Sans titre' %}
-					{% set mediaImage = media.poster_path ?? null %}
-					{% set mediaDate = media.release_date ?? media.first_air_date ?? null %}
-					{% set mediaPath = null %}
-					{% set mediaType = null %}
+				{{ include('components/mediacard.html.twig', {
+					media: media,
+					type: media.media_type
+				}) }}
 
-					{% if media.media_type == 'movie' %}
-
-						{% set mediaPath = path('app_movie_details', {
-                            id: media.id
-                        }) %}
-
-						{% set mediaType = 'Film' %}
-
-					{% elseif media.media_type == 'tv' %}
-
-						{% set mediaPath = path('app_tv_details', {
-                            id: media.id
-                        }) %}
-
-						{% set mediaType = 'Série' %}
-
-					{% endif %}
-
-					{% if mediaPath %}
-
-						<a href="{{ mediaPath }}" class="text-decoration-none flex-shrink-0" data-turbo-prefetch="false">
-
-							<article class="media-card">
-
-								<div class="media-card-image-wrapper rounded-4 overflow-hidden shadow">
-
-									{% if mediaImage %}
-
-										<img src="https://image.tmdb.org/t/p/w500{{ mediaImage }}" class="media-card-image" alt="{{ mediaTitle }}">
-
-									{% else %}
-
-										<div class="media-card-image d-flex align-items-center justify-content-center bg-secondary text-white-50 text-center p-3">
-											Image indisponible
-										</div>
-
-									{% endif %}
-
-									<div class="media-card-overlay"></div>
-
-								</div>
-
-								<div class="pt-3 px-1">
-
-									<h3 class="h6 fw-bold text-white text-truncate mb-1">
-										{{ mediaTitle }}
-									</h3>
-
-									<p class="small text-white-50 mb-0">
-
-										{% if mediaDate %}
-											{{ mediaDate|date('Y') }}
-										{% else %}
-											{{ mediaType }}
-										{% endif %}
-
-									</p>
-
-								</div>
-
-							</article>
-
-						</a>
-
-					{% endif %}
-
-				{% endfor %}
+			{% endfor %}
 
 			</div>
 
