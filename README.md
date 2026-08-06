@@ -17,6 +17,7 @@ HDFIDflix est une application Symfony permettant de rechercher et consulter des 
 - Consultation de la biographie et de la filmographie d’une personne
 - Interface responsive
 - Gestion d’événements avec un listener et un subscriber
+- Gestion des erreurs liées à l’API TMDB
 
 ## Technologies
 
@@ -73,7 +74,6 @@ php bin/console lint:container
 ## Tests
 
 Les tests utilisent des réponses TMDB simulées et ne nécessitent ni token réel ni connexion à l’API.
-Ils couvrent les contrôleurs, le listener et le subscriber.
 
 Pour lancer les tests :
 
